@@ -1,0 +1,61 @@
+<html>
+
+<style type="text/css">
+    div {
+        margin: 20px
+    }
+</style>
+
+<head>
+    <script type="text/javascript" src="/js/jquery-2.2.4.js"></script>
+    <script>
+        $(function () {
+
+        });
+
+        var multiFormSub = function () {
+
+            var data = new FormData($("#multi-form")[0]);
+            // data.append('file', $('#upload_file').prop('files')[0]);
+            // data.append('aaa', $('#aaa').val());
+            // data.append('bbb', $('#bbb').val());
+
+            $.ajax({
+                url: "/ftd/excel2mongo",
+                success: function (result) {
+                    // debugger;
+                    if(!result.flag){
+                        alert("import failed! the reason is: " + result.msg);
+                        return;
+                    }
+                    alert("import success! the import info: " + result.msg);
+
+                },
+                // contentType: "application/json",
+                contentType: false,
+                processData: false,
+                // cache: false,
+                // async: false,
+                type: "POST",
+                data: data
+            });
+
+            return false;
+        };
+
+    </script>
+</head>
+<body>
+
+<form action="javascript:void(0);" id="multi-form" enctype="multipart/form-data" onsubmit="multiFormSub();">
+<!--<form action="javascript:void(0);" id="multi-form"  onsubmit="multiFormSub();">-->
+    <div>aaa : <input id="aaa" name="aaa" type="text"></div>
+    <div>bbb : <input id="bbb" type="text"></div>
+    <div>Excel : <input id="upload_file" name="file" type="file"></div>
+    <div><input type="submit"></div>
+</form>
+
+
+</body>
+
+</html>
