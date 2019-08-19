@@ -1,4 +1,4 @@
-package com.shizy.service;
+package com.shizy.service.file;
 
 public interface FileToDatabaseService {
 

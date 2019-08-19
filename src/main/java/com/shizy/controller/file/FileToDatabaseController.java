@@ -1,5 +1,5 @@
 
-package com.shizy.controller;
+package com.shizy.controller.file;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

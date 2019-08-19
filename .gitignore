@@ -2,3 +2,4 @@
 .idea/
 Shizy-SpringBoot-Demo.iml
 target/
+/src/main/java/com/gentest/

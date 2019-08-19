@@ -1,12 +1,11 @@
-
-server:
-  port: 10086
-
 spring:
+  profiles:
+    active:
+      @profilesActive@ #见/resources/env/xxx/application-xxx.yml。需在IDEA的Active profile处添加"dev"
   application:
     name: web-base
-#  mvc:
-#    static-path-pattern: /static/**
+  #  mvc:
+  #    static-path-pattern: /static/**
   freemarker:
     template-loader-path: classpath:/webapps/templates/
     suffix: .html
@@ -18,22 +17,7 @@ spring:
   http:
     encoding:
       charset: UTF-8
-  resources:
-    static-locations: classpath:/webapps/static/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+###########################################
 
