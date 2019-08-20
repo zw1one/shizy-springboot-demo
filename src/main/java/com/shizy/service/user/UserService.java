@@ -1,7 +1,10 @@
 package com.shizy.service.user;
 
-import com.baomidou.mybatisplus.service.IService;
-import com.shizy.entity.user.User;
+import com.shizy.entity.user.UserDto;
+import com.shizy.entity.user.UserPo;
+import com.shizy.entity.user.UserVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -11,6 +14,19 @@ import com.shizy.entity.user.User;
  * @author shizy
  * @since 2019-08-19
  */
-public interface UserService extends IService<User> {
+public interface UserService {
+
+    public UserPo queryDetailPo(String id);
+
+    public UserVo queryDetailVo(String id);
+
+    public List<UserVo> queryList(UserDto dto);
+
+    public String add(UserPo po);
+
+    public boolean delete(String id);
+
+    public boolean updateById(UserPo po);
+
 
 }

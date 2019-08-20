@@ -191,12 +191,11 @@
             <version>1.1.2-beat1</version>
         </dependency>
 
+        <!--id生成 -->
         <dependency>
-            <groupId>shizy.util</groupId>
-            <artifactId>File-To-Database</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/webapps/lib/File-To-Database-1.0-SNAPSHOT.jar</systemPath>
+            <groupId>com.github.cnsvili</groupId>
+            <artifactId>snowflake</artifactId>
+            <version>1.0.1</version>
         </dependency>
 
         <!--########## utils end ##########-->

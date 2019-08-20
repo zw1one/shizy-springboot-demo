@@ -93,10 +93,7 @@ public class FileUtil {
         } else if ("G".equals(unit.toUpperCase())) {
             fomatSize = size * 1073741824;
         }
-        if (fileSize > fomatSize) {
-            return false;
-        }
-        return true;
+        return fileSize <= fomatSize;
     }
 
     /************************图片输出*********************************/

@@ -60,7 +60,11 @@ public class BeanUtil {
         return entity;
     }
 
-    public static <S, T> T copyParam2Entity(S source, T target, String[] ignoreFields) {
+    public static <S, T> T copyParam2Entity(S source, T target, String... ignoreFields) {
+
+        if (source == null || target == null) {
+            return target;
+        }
 
         Class<?> aClass = target.getClass();
         //迭代set
@@ -80,9 +84,11 @@ public class BeanUtil {
 
             Object sourceFieldValue = null;
             try {
-                sourceFieldValue = source.getClass()
-                        .getMethod("get" + field.substring(0, 1).toUpperCase() + field.substring(1))
-                        .invoke(source);
+                Method crtMethod = source.getClass()
+                        .getMethod("get" + field.substring(0, 1).toUpperCase() + field.substring(1));
+                crtMethod.setAccessible(true);
+
+                sourceFieldValue = crtMethod.invoke(source);
 
                 if (sourceFieldValue == null) {
                     continue;
@@ -93,9 +99,7 @@ public class BeanUtil {
                 }
 
                 method.invoke(target, sourceFieldValue);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
 //                e.printStackTrace();

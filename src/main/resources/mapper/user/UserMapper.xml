@@ -3,7 +3,7 @@
 <mapper namespace="com.shizy.mapper.user.UserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.shizy.entity.user.User">
+    <resultMap id="BaseResultMap" type="com.shizy.entity.user.UserPo">
         <result column="user_id" property="userId"/>
         <result column="user_account" property="userAccount"/>
         <result column="user_name" property="userName"/>

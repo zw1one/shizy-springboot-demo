@@ -9,7 +9,7 @@ import java.net.URI;
  */
 public class HttpGetWithEntity extends HttpEntityEnclosingRequestBase {
 
-    private final static String METHOD_NAME = "GET" ;
+    private final static String METHOD_NAME = "GET";
 
     public HttpGetWithEntity() {
         super();

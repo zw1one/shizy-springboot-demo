@@ -12,7 +12,7 @@ public class FormatUtil {
      */
     public static String formatJson(String jsonStr) {
         if (null == jsonStr || "".equals(jsonStr))
-            return "" ;
+            return "";
         StringBuilder sb = new StringBuilder();
         char last = '\0';
         char current = '\0';

@@ -29,5 +29,5 @@ public @interface QueryParam {
     /**
      * column between betweenStart and betweenEnd
      */
-    String column() default "" ;
+    String column() default "";
 }
