@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Import;
 
 
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})//不用数据库的话就加上这个排除
+
+@Import(DynamicDataSourceAutoConfiguration.class)//mybatis-plus 多数据源支持
+
 @SpringBootApplication
-@Import(DynamicDataSourceAutoConfiguration.class)
 public class ShizyApplication {
     public static void main(String[] args) {
         SpringApplication.run(ShizyApplication.class, args);
