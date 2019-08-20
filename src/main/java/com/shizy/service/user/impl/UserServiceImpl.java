@@ -1,6 +1,7 @@
 package com.shizy.service.user.impl;
 
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.entity.user.UserDto;
 import com.shizy.entity.user.UserPo;
 import com.shizy.entity.user.UserVo;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * <p>
@@ -26,7 +26,6 @@ import java.util.UUID;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
     @Autowired
     private UserMapper userMapper;
 
@@ -55,10 +54,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserVo> queryList(UserDto dto) {
+    public Page queryList(UserDto dto, Page page) {
         Wrapper wrapper = QueryUtil.getEntityCondition(dto, new UserPo());
 
-        if(dto.getNameAndAccount() != null && wrapper != null){
+        if (dto.getNameAndAccount() != null && wrapper != null) {
             String param = dto.getNameAndAccount();
             wrapper.andNew()
                     .like("user_account", param)
@@ -66,9 +65,12 @@ public class UserServiceImpl implements UserService {
                     .like("user_name", param);
         }
 
-        List<UserPo> listPo = userMapper.selectList(wrapper);
+        List<UserPo> listPo = userMapper.selectPage(page, wrapper);
 
-        return BeanUtil.copyParam2EntityList(listPo, new UserVo());
+        List<UserVo> listVo = BeanUtil.copyParam2EntityList(listPo, new UserVo());
+        page.setRecords(listPo);
+
+        return page;
     }
 
     /***********************************************/
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
         po.setUserId(id);
 
         int result = userMapper.insert(po);
-        if(result > 0){
+        if (result > 0) {
             return id;
         }
         return null;
@@ -89,7 +91,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean delete(String id) {
         int result = userMapper.deleteById(id);
-        if(result > 0){
+        if (result > 0) {
             return true;
         }
         return false;
@@ -97,8 +99,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateById(UserPo po) {
-        int result = userMapper.updateById(po);;
-        if(result > 0){
+        int result = userMapper.updateById(po);
+        ;
+        if (result > 0) {
             return true;
         }
         return false;

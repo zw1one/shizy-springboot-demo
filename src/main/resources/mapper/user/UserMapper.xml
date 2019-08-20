@@ -14,10 +14,10 @@
         user_id, user_account, user_name
     </sql>
 
-    <select id="selectPage" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"></include>
-        from user
-    </select>
+    <!--<select id="selectPage" resultMap="BaseResultMap">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List"></include>-->
+        <!--from user-->
+    <!--</select>-->
 
 </mapper>

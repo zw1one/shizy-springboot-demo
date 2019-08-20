@@ -1,10 +1,9 @@
 package com.shizy.service.user;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.entity.user.UserDto;
 import com.shizy.entity.user.UserPo;
 import com.shizy.entity.user.UserVo;
-
-import java.util.List;
 
 /**
  * <p>
@@ -20,7 +19,7 @@ public interface UserService {
 
     public UserVo queryDetailVo(String id);
 
-    public List<UserVo> queryList(UserDto dto);
+    public Page queryList(UserDto dto, Page page);
 
     public String add(UserPo po);
 

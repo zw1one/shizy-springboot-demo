@@ -1,6 +1,8 @@
 package com.shizy.controller.user;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.common.json.JsonResult;
+import com.shizy.common.json.page.PageDto;
 import com.shizy.entity.user.UserDto;
 import com.shizy.entity.user.UserPo;
 import com.shizy.entity.user.UserVo;
@@ -65,10 +67,10 @@ public class UserController {
 
     @ApiOperation(value = "user query list", notes = "")
     @RequestMapping(value = "/user/queryList", method = RequestMethod.POST)
-    public JsonResult queryList(@RequestBody UserDto userDto) {
+    public JsonResult queryList(@RequestBody UserDto userDto, @ModelAttribute PageDto pageDto) {
         try {
-            List<UserVo> list = userService.queryList(userDto);
-            return JsonResult.success(list);
+            Page pageList = userService.queryList(userDto, pageDto.getPageOrDefalt());
+            return JsonResult.success(pageList);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return JsonResult.fail();
