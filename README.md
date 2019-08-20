@@ -16,13 +16,6 @@ shizy-springboot-demo
 ```
 CREATE DATABASE test;
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_account` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -30,13 +23,9 @@ CREATE TABLE `user`  (
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
--- ----------------------------
--- Records of user
--- ----------------------------
 INSERT INTO `user` VALUES ('d78b3c1604514a33870c319a31043e6e', 'string', 'string');
 INSERT INTO `user` VALUES ('e8acb754f423475eb166981a60c9c037', 'string', 'string');
 
-SET FOREIGN_KEY_CHECKS = 1;
 ```
 
 ### 打包部署

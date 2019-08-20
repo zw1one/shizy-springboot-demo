@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/test")
 @Api(tags = "user-demo", description = "user CRUD")
 public class TestController {
 
@@ -23,8 +23,8 @@ public class TestController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "user add", notes = "")
-    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
+    @ApiOperation(value = "lol", notes = "")
+    @RequestMapping(value = "lol", method = RequestMethod.POST)
     public String add(@RequestBody Map param) {
 
 
