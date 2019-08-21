@@ -1,8 +1,9 @@
 package com.shizy.common.filter;
 
 
-import com.shizy.utils.LogUtil;
 import com.shizy.utils.http.HttpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import java.io.IOException;
 //@ServletComponentScan
 //@WebFilter(urlPatterns = "*")
 public class DebugFilter implements Filter {
+
+    private static final Logger logger = LoggerFactory.getLogger(DebugFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -25,17 +28,17 @@ public class DebugFilter implements Filter {
 //            ((HttpServletRequest) request).getParameterMap();
 //        }
 
-        LogUtil.info("=========debug request headers==========");
-        LogUtil.info(HttpUtil.getHeadersInfo((HttpServletRequest) request));
+        logger.info("=========debug request headers==========");
+        logger.info(HttpUtil.getHeadersInfo((HttpServletRequest) request));
 
         long time1 = System.currentTimeMillis();
 
         chain.doFilter(request, response);
 
         long time2 = System.currentTimeMillis();
-        LogUtil.info("========================================");
-        LogUtil.info("--server request process time: " + (time2 - time1) + "ms");
-        LogUtil.info("========================================");
+        logger.info("========================================");
+        logger.info("--server request process time: " + (time2 - time1) + "ms");
+        logger.info("========================================");
 
     }
 

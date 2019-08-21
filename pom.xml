@@ -99,7 +99,7 @@
             <version>1.7</version>
         </dependency>
 
-        <!--添加日志 -->
+        <!--自定义日志 (需排除springboot自带日志) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>

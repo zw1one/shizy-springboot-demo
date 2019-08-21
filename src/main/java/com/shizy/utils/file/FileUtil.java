@@ -1,4 +1,4 @@
-package com.shizy.utils;
+package com.shizy.utils.file;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 

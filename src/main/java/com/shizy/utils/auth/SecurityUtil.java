@@ -1,6 +1,5 @@
 package com.shizy.utils.auth;
 
-import com.shizy.utils.LogUtil;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
@@ -51,7 +50,7 @@ public final class SecurityUtil {
             keyGenForAES = KeyGenerator.getInstance("AES");
             keyGenForAES.init(128);
         } catch (NoSuchAlgorithmException e) {
-            LogUtil.error("初始化AES密钥生成器失败", e);
+//            LogUtil.error("初始化AES密钥生成器失败", e);
         }
     }
 

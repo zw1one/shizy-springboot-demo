@@ -1,4 +1,4 @@
-package com.shizy.utils;
+package com.shizy.utils.auth;
 
 import com.twitter.snowflake.sequence.IdSequence;
 import com.twitter.snowflake.support.IdSequenceFactory;

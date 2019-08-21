@@ -61,8 +61,8 @@ spring.datasource.druid.dynamic.datasource: # 连接池配置
 redis:
   host: 127.0.0.1
   port: 6379
-#  password: ly123456
-  database: 1
+#  password: 123456
+  database: 0
 
 ### mongodb
 #mongodb:

@@ -7,7 +7,7 @@ import com.shizy.entity.user.UserPo;
 import com.shizy.entity.user.UserVo;
 import com.shizy.mapper.user.UserMapper;
 import com.shizy.service.user.UserService;
-import com.shizy.utils.IdUtil;
+import com.shizy.utils.auth.IdUtil;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.query.QueryUtil;
 import org.apache.commons.lang.StringUtils;

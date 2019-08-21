@@ -57,10 +57,6 @@ public class UserController {
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     public JsonResult queryDetail(@PathVariable String userId) {
         try {
-
-            logger.info("aa");
-            logger.debug("aaa");
-
             UserVo userVo = userService.queryDetailVo(userId);
             return JsonResult.success(userVo);
         } catch (Exception e) {

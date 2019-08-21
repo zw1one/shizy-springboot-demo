@@ -12,7 +12,7 @@ import redis.clients.jedis.JedisPoolConfig;
 //@EnableCaching
 @Configuration
 @ConfigurationProperties("redis")
-public class CacheConfig {
+public class RedisConfig {
 
     private String host;
     private int port;
@@ -27,11 +27,11 @@ public class CacheConfig {
         config.setDatabase(database);
 
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(config);
-        //默认配置，以后可以改
+
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(200);//最大空闲(可用)连接
-//        jedisPoolConfig.setMinIdle(10);//最小空闲(可用)连接
-        jedisPoolConfig.setMaxTotal(200);//最大连接数
+        jedisPoolConfig.setMaxIdle(20);//最大空闲(可用)连接
+        jedisPoolConfig.setMinIdle(0);//最小空闲(可用)连接
+        jedisPoolConfig.setMaxTotal(20);//最大连接数
 
         jedisConnectionFactory.setPoolConfig(jedisPoolConfig);
 
@@ -45,14 +45,6 @@ public class CacheConfig {
         redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate;
     }
-
-    //该版本的cacheManager不支持过期时间，所以不使用
-    /*@Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        return RedisCacheManager.create(connectionFactory);
-
-    }*/
-
 
     public String getHost() {
         return host;
@@ -86,3 +78,15 @@ public class CacheConfig {
         this.database = database;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
