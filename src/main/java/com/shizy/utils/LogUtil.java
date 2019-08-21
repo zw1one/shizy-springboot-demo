@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 /**
  * 日志工具类，封装了slf4j的常见用法。
  *
- * @author ningjh
- * @since 2016-07-19
  */
 public final class LogUtil {
     private final static Logger logger = LoggerFactory.getLogger(LogUtil.class);

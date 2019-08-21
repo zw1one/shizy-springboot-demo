@@ -35,8 +35,6 @@ public class TestController {
          *
          * 2、mongodb
          *
-         * 3、log
-         *
          *
          *
          */
