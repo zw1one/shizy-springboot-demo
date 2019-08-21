@@ -58,11 +58,19 @@ spring.datasource.druid.dynamic.datasource: # 连接池配置
 #      validationQuery: select 1 from dual
 
 ### redis
-redis:
-  host: 127.0.0.1
-  port: 6379
-#  password: 123456
-  database: 0
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+    timeout: 5000ms
 
 ### mongodb
 #mongodb:

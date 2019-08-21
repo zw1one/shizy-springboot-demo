@@ -41,6 +41,19 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "user update", notes = "")
+    @RequestMapping(value = "/user/update", method = RequestMethod.POST)
+    public JsonResult add(@RequestBody UserPo param) {
+        try {
+            UserPo po = BeanUtil.copyParam2Entity(param, new UserPo());
+            boolean result = userService.updateById(po);
+            return JsonResult.success(result);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return JsonResult.fail();
+        }
+    }
+
     @ApiOperation(value = "user delete", notes = "")
     @RequestMapping(value = "/user/delete", method = RequestMethod.POST)
     public JsonResult delete(@RequestBody UserCtrParam_key param) {

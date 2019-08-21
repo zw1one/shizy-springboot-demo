@@ -12,6 +12,8 @@ import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.query.QueryUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,31 +28,49 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final static String userDetailVo = "userDetailVo";
+
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    private static final String cacheKey = "userVo";
 
     /***********************************************/
 
     @Override
-    public UserPo queryDetailPo(String userId) {
-        if (StringUtils.isBlank(userId)) {
+    public UserPo queryDetailPo(String id) {
+        if (StringUtils.isBlank(id)) {
             return null;
         }
-        return userMapper.selectById(userId);
+        return userMapper.selectById(id);
     }
 
     @Override
-    public UserVo queryDetailVo(String userId) {
-        if (StringUtils.isBlank(userId)) {
+//    @Cacheable(value = cacheKey, key = "#id")
+    public UserVo queryDetailVo(String id) {
+        if (StringUtils.isBlank(id)) {
             return null;
         }
 
-        UserPo userPo = userMapper.selectById(userId);
+        UserVo userVo = null;
+
+        userVo = (UserVo) redisTemplate.opsForHash().get(cacheKey, id);
+        if(userVo != null){
+            return userVo;
+        }
+
+        UserPo userPo = userMapper.selectById(id);
         if (userPo == null) {
             return null;
         }
 
-        return BeanUtil.copyParam2Entity(userPo, new UserVo());
+        userVo = BeanUtil.copyParam2Entity(userPo, new UserVo());
+        redisTemplate.opsForHash().put(cacheKey, id, userVo);
+        return userVo;
     }
 
     @Override
@@ -75,6 +95,7 @@ public class UserServiceImpl implements UserService {
 
     /***********************************************/
 
+    //@Cacheable必须返回值要存的数据，不能设置过期，为了方便还是自己缓存好些
     @Override
     public String add(UserPo po) {
 
@@ -83,6 +104,8 @@ public class UserServiceImpl implements UserService {
 
         int result = userMapper.insert(po);
         if (result > 0) {
+            redisTemplate.opsForHash().put(cacheKey, po.getUserId(), BeanUtil.copyParam2Entity(po, new UserVo()));
+//            redisTemplate.expire();
             return id;
         }
         return null;
@@ -92,6 +115,7 @@ public class UserServiceImpl implements UserService {
     public boolean delete(String id) {
         int result = userMapper.deleteById(id);
         if (result > 0) {
+            redisTemplate.opsForHash().delete(cacheKey, id);
             return true;
         }
         return false;
@@ -100,8 +124,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateById(UserPo po) {
         int result = userMapper.updateById(po);
-        ;
+
         if (result > 0) {
+            redisTemplate.opsForHash().put(cacheKey, po.getUserId(), BeanUtil.copyParam2Entity(po, new UserVo()));
             return true;
         }
         return false;
@@ -110,17 +135,8 @@ public class UserServiceImpl implements UserService {
     /***********************************************/
 
 
+
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
