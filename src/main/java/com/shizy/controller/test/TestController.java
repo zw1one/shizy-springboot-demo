@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 
 @RestController
 @RequestMapping("/test")
@@ -32,22 +35,21 @@ public class TestController {
          * todo
          *
          * 1、redis
+         * 定时任务！
          *
          * 2、mongodb
+         *
+         * 3、切面 注解 写入mongodb
+         *
+         * 4、@Async demo
+         *
          *
          */
 
 
-
-
-
-
-
-
-
-
         return "";
     }
+
 
 }
 
