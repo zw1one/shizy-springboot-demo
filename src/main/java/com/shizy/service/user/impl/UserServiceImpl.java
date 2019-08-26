@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
     /***********************************************/
 
-    //@Cacheable必须返回值要存的数据，不能设置过期，为了方便还是自己缓存好些
+    //若使用@Cacheable做缓存，返回值必须为要缓存的数据，且不方便设置过期时间、缓存格式，缓存在代码中的位置不可控，为了方便还是自己缓存好些
     @Override
     public String add(UserPo po) {
 
