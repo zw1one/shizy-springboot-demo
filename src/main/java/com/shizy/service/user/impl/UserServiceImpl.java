@@ -12,7 +12,6 @@ import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.query.QueryUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -29,15 +28,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final static String userDetailVo = "userDetailVo";
-
     @Autowired
     private UserMapper userMapper;
 
     @Autowired
     private RedisTemplate redisTemplate;
-
-    private static final String cacheKey = "userVo";
 
     /***********************************************/
 
@@ -59,7 +54,7 @@ public class UserServiceImpl implements UserService {
         UserVo userVo = null;
 
         userVo = (UserVo) redisTemplate.opsForHash().get(cacheKey, id);
-        if(userVo != null){
+        if (userVo != null) {
             return userVo;
         }
 
@@ -95,7 +90,12 @@ public class UserServiceImpl implements UserService {
 
     /***********************************************/
 
-    //若使用@Cacheable做缓存，返回值必须为要缓存的数据，且不方便设置过期时间、缓存格式，缓存在代码中的位置不可控，为了方便还是自己缓存好些
+    /**
+     * 若使用@Cacheable做缓存，返回值必须为要缓存的数据，且不方便设置过期时间、缓存格式，缓存在代码中的位置不可控，为了方便还是自己缓存好些
+     *
+     * 缓存清理见 ClearRedisCache.java
+     */
+
     @Override
     public String add(UserPo po) {
 
@@ -133,7 +133,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /***********************************************/
-
 
 
 }

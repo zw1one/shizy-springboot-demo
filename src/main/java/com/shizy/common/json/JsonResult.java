@@ -2,12 +2,11 @@ package com.shizy.common.json;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.shizy.common.json.page.PageInfo;
 import com.shizy.utils.bean.BeanUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import com.shizy.common.json.page.PageInfo;
 
 import java.io.Serializable;
 

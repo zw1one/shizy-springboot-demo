@@ -24,7 +24,7 @@ public class UserDto {
     @QueryParam(eq = true)
     private String userAccount;
 
-    @QueryParam(like  = true)
+    @QueryParam(like = true)
     private String userName;
 
     private String nameAndAccount;

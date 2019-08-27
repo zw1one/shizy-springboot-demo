@@ -9,9 +9,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-//@Component
-//@ServletComponentScan
-//@WebFilter(urlPatterns = "*")
+/**
+ * 配置见FilterConfig.java
+ */
 public class DebugFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(DebugFilter.class);
@@ -23,10 +23,6 @@ public class DebugFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-//        if (request.getContentType() != null && request.getContentType().contains("multipart/form-data")) {
-//            ((HttpServletRequest) request).getParameterMap();
-//        }
 
         logger.info("=========debug request headers==========");
         logger.info(HttpUtil.getHeadersInfo((HttpServletRequest) request));

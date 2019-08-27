@@ -25,9 +25,9 @@ public class MpGenerator {
         String[] includeTables = new String[]{"user"};//需要生成的表
         String[] excludeTables = new String[]{};//排除生成的表
 
-        String moduleName = "user" ;//模块名
-        String author = "shizy" ;
-        final String outputDir = System.getProperty("user.dir") + "\\src\\main\\java" ;//在项目内生成
+        String moduleName = "user";//模块名
+        String author = "shizy";
+        final String outputDir = System.getProperty("user.dir") + "\\src\\main\\java";//在项目内生成
 
         AutoGenerator mpg = new AutoGenerator();
 
@@ -147,7 +147,7 @@ public class MpGenerator {
         focList.add(new FileOutConfig("/mp/generator/templates/mapper.xml.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return outputDir.replace("java", "resources") + "\\mapper\\" + tableInfo.getEntityName() + "Mapper.xml" ;
+                return outputDir.replace("java", "resources") + "\\mapper\\" + tableInfo.getEntityName() + "Mapper.xml";
             }
         });
         cfg.setFileOutConfigList(focList);

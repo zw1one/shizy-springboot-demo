@@ -30,24 +30,24 @@ public class PageDto {
 
     /************************************************/
 
-    public Page getPageOrDefalt(){
+    public Page getPageOrDefalt() {
         return getPageOrDefalt(null, null);
     }
 
-    public Page getPageOrDefalt(Integer pageDefalt, Integer pageSizeDefalt){
+    public Page getPageOrDefalt(Integer pageDefalt, Integer pageSizeDefalt) {
         Integer page = this.getPage();
-        if(page == null || page == 0){
-            if(pageDefalt != null){
+        if (page == null || page == 0) {
+            if (pageDefalt != null) {
                 page = pageDefalt;
-            }else{
+            } else {
                 page = DEFALT_PAGE;
             }
         }
         Integer pageSize = this.getPageSize();
-        if(pageSize == null || pageSize == 0){
-            if(pageSizeDefalt != null){
+        if (pageSize == null || pageSize == 0) {
+            if (pageSizeDefalt != null) {
                 pageSize = pageSizeDefalt;
-            }else{
+            } else {
                 pageSize = DEFALT_PAGE_SIZE;
             }
         }

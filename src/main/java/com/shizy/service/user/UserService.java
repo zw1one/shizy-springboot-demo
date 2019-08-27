@@ -15,6 +15,8 @@ import com.shizy.entity.user.UserVo;
  */
 public interface UserService {
 
+    public static final String cacheKey = "userVo";
+
     public UserPo queryDetailPo(String id);
 
     public UserVo queryDetailVo(String id);
