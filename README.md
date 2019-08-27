@@ -9,7 +9,7 @@ shizy-springboot-demo
 ### 启动出现问题
 
 * IDEA的Active profiles处，添加`dev`
-* 查看`application-dev.yml`，检查MySQL、MongoDB、Redis
+* 查看`application-dev.yml`，检查MySQL、Redis
 
 ### MySQL建库建表
 
@@ -33,8 +33,19 @@ INSERT INTO `user` VALUES ('e8acb754f423475eb166981a60c9c037', 'string', 'string
 * Maven打包命令
 ```
 mvn clean package -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Pdev
+mvn clean package -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Prelease
 ```
+
+打包完idea启动项目报错，Rebuild project或者mvn clean
+
 * jar包运行命令
 ```
-java -server -Xmx1024m -Xms256m -XX:+UseParallelGC -XX:ParallelGCThreads=20  -jar Shizy-SpringBoot-Demo-1.0-SNAPSHOT.jar &
+(java -server -Xmx1024m -Xms256m -XX:+UseParallelGC -XX:ParallelGCThreads=20  -jar Shizy-SpringBoot-Demo-1.0-SNAPSHOT.jar &)
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>

@@ -22,7 +22,7 @@ spring.datasource.dynamic:
   datasource:
     master:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&autoReconnect=true
+      url: jdbc:mysql://192.168.110.56:3306/test?useUnicode=true&characterEncoding=utf8&autoReconnect=true
       username: root
       password: 123456
 #    slave1: # 多数据源test
@@ -59,29 +59,10 @@ spring.datasource.druid.dynamic.datasource: # 连接池配置
 
 ### redis
 redis:
-  host: 127.0.0.1
+  host: 192.168.110.56
   port: 6379
 #  password: ly123456
   database: 1
-
-### mongodb
-#mongodb:
-#  datasource:
-#    dynamic:
-#      primary: master
-#      datasource:
-#        master:
-#          host: 127.0.0.1
-#          port: 27017
-#          database: campus_brain
-#          username: chenjiayu
-#          password: chenjiayu
-#        my:
-#          host: 129.204.18.61
-#          port: 27017
-#          database: campus_brain
-#          username: chenjiayu
-#          password: chenjiayu
 
 ### mybatis-plus
 mybatis-plus:

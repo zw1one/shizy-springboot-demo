@@ -72,25 +72,6 @@ spring:
         min-idle: 0
     timeout: 3000ms
 
-### mongodb
-#mongodb:
-#  datasource:
-#    dynamic:
-#      primary: master
-#      datasource:
-#        master:
-#          host: 127.0.0.1
-#          port: 27017
-#          database: campus_brain
-#          username: chenjiayu
-#          password: chenjiayu
-#        my:
-#          host: 129.204.18.61
-#          port: 27017
-#          database: campus_brain
-#          username: chenjiayu
-#          password: chenjiayu
-
 ### mybatis-plus
 mybatis-plus:
   typeAliasesPackage: com.shizy.entity.*
