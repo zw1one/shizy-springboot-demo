@@ -32,7 +32,7 @@ public class ClearRedisCache {
      * 清理指定cacheKeys的redis缓存
      * 运行时间：每周一0点
      */
-    @Scheduled(cron = "0 0 0 0 0 1")
+    @Scheduled(cron = "0 0 0 ? * MON")
     public synchronized void clearRedisCache() {
 
         logger.info("=============[TimerTask]===============");
