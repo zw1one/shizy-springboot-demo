@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/test")
-@Api(tags = "user-demo", description = "user CRUD")
+@Api(tags = "test", description = "lol")
 public class TestController {
 
     private static final Logger logger = LoggerFactory.getLogger(TestController.class);
@@ -23,7 +23,7 @@ public class TestController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "lol", notes = "")
+    @ApiOperation(value = "lol", notes = "{\"param-key\":\"param-value\"}")
     @RequestMapping(value = "lol", method = RequestMethod.POST)
     public String add(@RequestBody Map param) {
 
