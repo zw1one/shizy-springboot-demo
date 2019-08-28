@@ -99,7 +99,9 @@ file:
   PathWindows: d:/file
   PathLinux: /opt/file
 
-
+# 是否使用redis缓存
+redis:
+  enable: true
 
 
 

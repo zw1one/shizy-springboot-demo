@@ -10,9 +10,9 @@ import com.shizy.service.user.UserService;
 import com.shizy.utils.auth.IdUtil;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.query.QueryUtil;
+import com.shizy.utils.redis.CacheUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private CacheUtil<String, String, UserVo> cacheUtil;
 
     /***********************************************/
 
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
         UserVo userVo = null;
 
-        userVo = (UserVo) redisTemplate.opsForHash().get(cacheKey, id);
+        userVo = cacheUtil.getHash(cacheKey, id);
         if (userVo != null) {
             return userVo;
         }
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
         }
 
         userVo = BeanUtil.copyParam2Entity(userPo, new UserVo());
-        redisTemplate.opsForHash().put(cacheKey, id, userVo);
+        cacheUtil.putHash(cacheKey, id, userVo);
         return userVo;
     }
 
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 若使用@Cacheable做缓存，返回值必须为要缓存的数据，且不方便设置过期时间、缓存格式，缓存在代码中的位置不可控，为了方便还是自己缓存好些
-     *
+     * <p>
      * 缓存清理见 ClearRedisCache.java
      */
 
@@ -104,8 +104,7 @@ public class UserServiceImpl implements UserService {
 
         int result = userMapper.insert(po);
         if (result > 0) {
-            redisTemplate.opsForHash().put(cacheKey, po.getUserId(), BeanUtil.copyParam2Entity(po, new UserVo()));
-//            redisTemplate.expire();
+            cacheUtil.putHash(cacheKey, po.getUserId(), BeanUtil.copyParam2Entity(po, new UserVo()));
             return id;
         }
         return null;
@@ -113,9 +112,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean delete(String id) {
+
+        if(StringUtils.isBlank(id)){
+            return false;
+        }
+
         int result = userMapper.deleteById(id);
         if (result > 0) {
-            redisTemplate.opsForHash().delete(cacheKey, id);
+            cacheUtil.deleteHash(cacheKey, id);
             return true;
         }
         return false;
@@ -123,10 +127,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateById(UserPo po) {
+        if(StringUtils.isBlank(po.getUserId())){
+            return false;
+        }
+
         int result = userMapper.updateById(po);
 
         if (result > 0) {
-            redisTemplate.opsForHash().put(cacheKey, po.getUserId(), BeanUtil.copyParam2Entity(po, new UserVo()));
+            cacheUtil.putHash(cacheKey, po.getUserId(), BeanUtil.copyParam2Entity(po, new UserVo()));
             return true;
         }
         return false;

@@ -1,5 +1,6 @@
 package com.shizy.controller.test;
 
+import com.alibaba.fastjson.JSON;
 import com.shizy.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +28,7 @@ public class TestController {
     @RequestMapping(value = "lol", method = RequestMethod.POST)
     public String add(@RequestBody Map param) {
 
-        return "lol";
+        return JSON.toJSONString(param);
     }
 
 

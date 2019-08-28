@@ -273,9 +273,9 @@
         </profile>
         <!--发布环境-->
         <profile>
-            <id>realease</id>
+            <id>release</id>
             <properties>
-                <profilesActive>realease</profilesActive>
+                <profilesActive>release</profilesActive>
             </properties>
         </profile>
     </profiles>

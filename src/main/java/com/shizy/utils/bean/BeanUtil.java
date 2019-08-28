@@ -44,15 +44,11 @@ public class BeanUtil {
             if (method.getName().indexOf("set") != 0) {
                 continue;
             }
-            String field = new StringBuffer()
-                    .append(method.getName().substring(3, 4).toLowerCase())
-                    .append(method.getName().substring(4))
-                    .toString();
+            String field = method.getName().substring(3, 4).toLowerCase() +
+                    method.getName().substring(4);
             try {
                 method.invoke(entity, paramMap.get(field));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
@@ -60,7 +56,7 @@ public class BeanUtil {
         return entity;
     }
 
-    public static <S, T> T copyParam2Entity(S source, T target, String... ignoreFields) {
+    public static <S, T> T copyParam2Entity(S source, T target, String[] ignoreFields) {
 
         if (source == null || target == null) {
             return target;
@@ -73,10 +69,8 @@ public class BeanUtil {
                 continue;
             }
 
-            String field = new StringBuffer()
-                    .append(method.getName().substring(3, 4).toLowerCase())
-                    .append(method.getName().substring(4))
-                    .toString();
+            String field = method.getName().substring(3, 4).toLowerCase() +
+                    method.getName().substring(4);
 
             if (isIgnoredField(ignoreFields, field)) {
                 continue;
@@ -125,8 +119,8 @@ public class BeanUtil {
             return false;
         }
 
-        for (int i = 0; i < ignoreFields.length; i++) {
-            if (ignoreFields[i].equals(field)) {
+        for (String ignoreField : ignoreFields) {
+            if (ignoreField.equals(field)) {
                 return true;
             }
         }
@@ -144,12 +138,10 @@ public class BeanUtil {
     public static <S, T> List<T> copyParam2EntityList(List<S> sourceList, T targetGeneric, String... ignoreField) {
         Class targetClass = targetGeneric.getClass();
         List<T> targetList = new ArrayList<>();
-        for (int i = 0; i < sourceList.size(); i++) {
+        for (S s : sourceList) {
             try {
-                targetList.add(copyParam2Entity(sourceList.get(i), (T) targetClass.newInstance(), ignoreField));
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
+                targetList.add(copyParam2Entity(s, (T) targetClass.newInstance(), ignoreField));
+            } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
@@ -167,10 +159,8 @@ public class BeanUtil {
                 //若不为get或为getClass
                 continue;
             }
-            String field = new StringBuffer()
-                    .append(method.getName().substring(3, 4).toLowerCase())
-                    .append(method.getName().substring(4))
-                    .toString();
+            String field = method.getName().substring(3, 4).toLowerCase() +
+                    method.getName().substring(4);
             try {
                 existMap.put(field, method.invoke(entity));
             } catch (Exception e) {
@@ -185,7 +175,7 @@ public class BeanUtil {
     /**
      * entity to map
      */
-    public static <T> Map<? extends String, ? extends Object> genMapFromEntity(T entity) {
+    public static <T> Map<? extends String, ?> genMapFromEntity(T entity) {
         return genMapFromEntity(entity, new HashMap<>());
     }
 
@@ -198,9 +188,7 @@ public class BeanUtil {
             return (T) obj.getClass().getMethod(
                     "get" + field.substring(0, 1).toUpperCase() + field.substring(1)
             ).invoke(obj);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
 //            e.printStackTrace();
@@ -217,49 +205,18 @@ public class BeanUtil {
                     fieldClass
             );
         } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
         }
-        //get Method    Integer.class -> int.class
-//        try {
-//            m = obj.getClass().getMethod(
-//                    "set" + field.substring(0, 1).toUpperCase() + field.substring(1),
-//                    packag2BasicClass(value.getClass())
-//            );
-//        } catch (NoSuchMethodException e) {
-//        }
         //invoke
         try {
             if (m != null) {
                 m.invoke(obj, value);
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
         return obj;
-    }
-
-    private static Class packag2BasicClass(Class packageClass) {
-        Class basicClass = null;
-        if (packageClass == Byte.class) {
-            basicClass = byte.class;
-        } else if (packageClass == Short.class) {
-            basicClass = short.class;
-        } else if (packageClass == Integer.class) {
-            basicClass = int.class;
-        } else if (packageClass == Long.class) {
-            basicClass = long.class;
-        } else if (packageClass == Float.class) {
-            basicClass = float.class;
-        } else if (packageClass == Double.class) {
-            basicClass = double.class;
-        } else if (packageClass == Character.class) {
-            basicClass = char.class;
-        } else if (packageClass == Boolean.class) {
-            basicClass = boolean.class;
-        }
-        return basicClass;
     }
 
     @Test
