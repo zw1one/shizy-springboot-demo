@@ -15,22 +15,11 @@ public class UserTest {
 
     @Test
     public void crudTest() {
-
-        //add
         String id = crudAdd();
-
-        //update
         update(id);
-
-        //queryDetail
         queryDetail(id);
-
-        //queryList
         queryList();
-
-        //delete
         delete(id);
-
     }
 
     private String crudAdd() {
