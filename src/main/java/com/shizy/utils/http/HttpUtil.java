@@ -104,7 +104,7 @@ public class HttpUtil {
 
             HttpGet httpGet = new HttpGet(uri.toString());
 
-            if(headers != null){
+            if (headers != null) {
                 for (Map.Entry entry : headers.entrySet()) {
                     httpGet.addHeader(entry.getKey().toString(), entry.getValue().toString());
                 }
