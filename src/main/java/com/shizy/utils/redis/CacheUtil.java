@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CacheUtil<H, HK, HV> {
 
-    @Value("${redis.enable : false}")
-    private boolean enable = false;
+    @Value("${redis.enable:false}")
+    private boolean enable;
 
     @Autowired
     private RedisTemplate redisTemplate;

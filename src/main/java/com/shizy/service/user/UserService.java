@@ -5,6 +5,8 @@ import com.shizy.entity.user.UserDto;
 import com.shizy.entity.user.UserPo;
 import com.shizy.entity.user.UserVo;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -26,6 +28,8 @@ public interface UserService {
     public String add(UserPo po);
 
     public boolean delete(String id);
+
+    public int deleteBatch(List ids);
 
     public boolean updateById(UserPo po);
 

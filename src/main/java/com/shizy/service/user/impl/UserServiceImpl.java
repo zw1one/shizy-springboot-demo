@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean delete(String id) {
 
-        if(StringUtils.isBlank(id)){
+        if (StringUtils.isBlank(id)) {
             return false;
         }
 
@@ -126,8 +126,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int deleteBatch(List ids) {
+
+        if (ids == null || ids.size() <= 0) {
+            return -1;
+        }
+
+        int result = userMapper.deleteBatchIds(ids);
+        if (result > 0) {
+            cacheUtil.deleteHash(cacheKey, ids.toArray());
+            return result;
+        }
+        return -1;
+    }
+
+    @Override
     public boolean updateById(UserPo po) {
-        if(StringUtils.isBlank(po.getUserId())){
+        if (StringUtils.isBlank(po.getUserId())) {
             return false;
         }
 
