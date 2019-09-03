@@ -24,7 +24,7 @@ public class UserBatchController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "user delete", notes = "")
+    @ApiOperation(value = "user delete", notes = "[\"82e7e1ac8a9b41db8f4e4fc9bfb19c29\"]")
     @RequestMapping(value = "/user/deleteBatch", method = RequestMethod.POST)
     public JsonResult deleteBatch(@RequestBody List<String> param) {
         try {

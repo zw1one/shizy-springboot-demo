@@ -37,6 +37,10 @@ public class JsonResult implements Serializable {
 
     /******************************************/
 
+    public static JsonResult success() {
+        return success(null);
+    }
+
     public static JsonResult success(Object data) {
 
         if (data instanceof Page) {

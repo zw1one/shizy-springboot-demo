@@ -101,7 +101,7 @@ file:
 
 # 是否使用redis缓存
 redis:
-  enable: true
+  enable: false
 
 
 

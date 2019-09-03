@@ -8,8 +8,11 @@ spring.profiles:
 
 spring.application:
   name: web-base
-#  mvc:
-#    static-path-pattern: /static/** # 静态文件要求的前缀
+
+#spring.resources:
+#  static-locations: classpath:/webapps/static/
+#spring.mvc:
+#  static-path-pattern: /static/** # 静态文件要求的前缀
 
 spring.freemarker:
   template-loader-path: classpath:/webapps/templates/
@@ -24,6 +27,7 @@ spring.servlet:
 spring.http:
   encoding:
     charset: UTF-8
+    force: true
 
 
 ###########################################

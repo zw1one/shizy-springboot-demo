@@ -1,0 +1,92 @@
+<html>
+
+<style type="text/css">
+    div {
+        margin: 20px
+    }
+</style>
+
+<head>
+    <script type="text/javascript" src="/js/jquery-2.2.4.js"></script>
+    <script>
+        // $(function () {
+        //
+        // });
+
+        var importData = function () {
+
+            var data = new FormData($("#multi-form")[0]);
+
+            $.ajax({
+                url: "/api/user/importData",
+                success: function (result) {
+                    alert(JSON.stringify(result));
+                    // debugger;
+                },
+                contentType: false,
+                processData: false,
+                type: "POST",
+                data: data
+            });
+
+            return false;
+        };
+
+        var exportData = function(){
+            $.ajax({
+                url: "/api/user/exportData?param1=123",
+                success: function (result) {
+                    alert(JSON.stringify(result));
+                    // debugger;
+                },
+                type: "GET"
+            });
+        }
+
+
+
+    </script>
+</head>
+<body>
+
+<form action="javascript:void(0);" id="multi-form" enctype="multipart/form-data" onsubmit="importData();">
+
+    导入：
+
+    <hr>
+
+    <div>Excel : <input id="upload_file" name="file" type="file"></div>
+    <div>可选参数1 : <input id="param1" name="param1" type="text"></div>
+    <div>可选参数2 : <input id="param2" name="param2" type="text"></div>
+    <div><input type="submit" value="导入"></div>
+
+</form>
+
+
+<hr>
+导出
+<div><input type="button" value="导出" onclick="exportData();"></div>
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
