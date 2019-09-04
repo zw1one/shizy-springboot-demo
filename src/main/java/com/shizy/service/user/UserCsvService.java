@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public interface UserCsvService {
 
-    public void importData(InputStream inputStream, Map<String, Object> params);
+    public void importData(InputStream inputStream, Map<String, Object> params) throws Exception;
 
     public void exportData(Map<String, Object> params);
 }

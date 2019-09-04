@@ -6,6 +6,8 @@ import com.shizy.utils.jdbc.InserBatchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -42,15 +44,17 @@ public class UserCsvServiceImpl implements UserCsvService {
 
 
     @Override
-    public void importData(InputStream inputStream, Map<String, Object> params) {
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)//默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
+    public void importData(InputStream inputStream, Map<String, Object> params){
 
         List z = new ArrayList();
         z.add(new UserPo("1", "2", "3"));
+        z.add(new UserPo("2", "2", "3"));
+        z.add(new UserPo("2", "2", "3"));
 
         inserBatchUtil.insertBatch(z);
 
         System.out.println();
-
     }
 
     @Override

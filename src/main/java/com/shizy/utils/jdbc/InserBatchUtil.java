@@ -24,10 +24,7 @@ public class InserBatchUtil {
 
     public <PO> int[][] insertBatch(List<PO> data, int batchSize) {
 
-        //"insert into books (name, price) values(?,?)"
-
         List<Field> fields = getFields(data.get(0));
-
         String sql = getInsertSql(data.get(0));
 
         int[][] updateCounts = jdbcTemplate.batchUpdate(
@@ -71,12 +68,6 @@ public class InserBatchUtil {
             fieldNames.add(field);
         }
         return fieldNames;
-    }
-
-    public static void main(String[] args) {
-
-
-
     }
 
 

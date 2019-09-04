@@ -45,12 +45,14 @@ public class UserCsvController {
         }
     }
 
-    private JsonResult importDataCatch(InputStream inputStream, Map<String, Object> params) {
+    private JsonResult importDataCatch(InputStream inputStream, Map<String, Object> params) throws Exception {
 
         try {
             userCsvService.importData(inputStream, params);
         } catch (DuplicateKeyException e) {
             return JsonResult.fail("primary key duplicate: [" + FormatUtil.getDuplicateKey(e.getMessage()) + "]");
+        } catch (Exception e) {
+            throw e;
         }
         return JsonResult.success();
     }
