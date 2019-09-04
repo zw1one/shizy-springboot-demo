@@ -17,9 +17,9 @@ public class BeanUtil {
     /**
      * 如果一个参数，他不是string，你要把get他然后toString，如果他不存在，get出来就是null，null.toString()就gg
      */
-    public static String getString(Map map, String param) {
-        return map.containsKey(param) ? map.get(param).toString() : null;
-    }
+//    public static String getString(Map map, String param) {
+//        return map.containsKey(param) ? map.get(param).toString() : null;
+//    }
 
     /***********************************************************/
 

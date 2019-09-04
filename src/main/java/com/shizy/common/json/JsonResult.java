@@ -38,7 +38,7 @@ public class JsonResult implements Serializable {
     /******************************************/
 
     public static JsonResult success() {
-        return success(null);
+        return success("success");
     }
 
     public static JsonResult success(Object data) {

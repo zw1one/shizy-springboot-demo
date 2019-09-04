@@ -2,6 +2,8 @@ package com.shizy.utils.format;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FormatUtil {
     /**
@@ -61,37 +63,48 @@ public class FormatUtil {
         return sb.toString();
     }
 
-    /**
-     * 数值格式化小数点后两位
-     *
-     * @param value 数值
-     * @return double
-     */
-    public static double formatDouble(double value) {
-        value = new BigDecimal(value).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-        return value;
-    }
-
-    /**
-     * 小数点后两位为0，则double转为整数格式，不显示小数,否则显示两位小数
-     *
-     * @param value 数值
-     * @return String
-     */
-    public static String formatDoubleValue(double value) {
-        String leadDes;
-        if (Math.round(value) - value == 0) {
-            leadDes = String.valueOf((long) value);
-        } else {
-            DecimalFormat df = new DecimalFormat("0.00");
-            leadDes = String.valueOf(df.format(value));
-        }
-        return leadDes;
-    }
-
     private static void addIndentBlank(StringBuilder sb, int indent) {
         for (int i = 0; i < indent; i++) {
             sb.append('\t');
         }
     }
+
+    /*****************************************************/
+
+    public static String getDuplicateKey(String emsg) {
+        Pattern p = Pattern.compile("Duplicate entry '.*' for key 'PRIMARY';");
+        Matcher m = p.matcher(emsg);
+
+        String match = null;
+        if (m.find()) {
+            match = m.group();
+        }
+        match = match.substring("Duplicate entry ".length(), match.indexOf(" for key 'PRIMARY';"));
+        match = match.substring(1, match.length() - 1);
+        return match;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
