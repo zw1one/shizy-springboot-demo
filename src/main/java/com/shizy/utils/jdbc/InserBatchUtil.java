@@ -72,15 +72,15 @@ public class InserBatchUtil {
         for (Field field : fields) {
             String columns = null;
             TableId tableId = field.getAnnotation(TableId.class);
-            if(tableId != null){
+            if (tableId != null) {
                 columns = tableId.value();
             }
             TableField tableField = field.getAnnotation(TableField.class);
-            if(tableField != null){
+            if (tableField != null) {
                 columns = tableField.value();
             }
 
-            if(columns == null){
+            if (columns == null) {
                 continue;
             }
             str.append(columns).append(", ");

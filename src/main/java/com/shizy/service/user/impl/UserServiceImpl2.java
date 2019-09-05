@@ -12,7 +12,6 @@ import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.query.QueryUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -95,10 +94,7 @@ public class UserServiceImpl2 implements UserService {
         }
 
         int result = userMapper.deleteById(id);
-        if (result > 0) {
-            return true;
-        }
-        return false;
+        return result > 0;
     }
 
     @Override
@@ -121,10 +117,7 @@ public class UserServiceImpl2 implements UserService {
         }
 
         int result = userMapper.updateById(po);
-        if (result > 0) {
-            return true;
-        }
-        return false;
+        return result > 0;
     }
 
     /***********************************************/

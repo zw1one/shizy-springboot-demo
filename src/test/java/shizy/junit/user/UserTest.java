@@ -22,6 +22,27 @@ public class UserTest {
         delete(id);
     }
 
+    @Test
+    public void zz() {
+
+        for (int i = 0; i < 10000; i++) {
+
+            String url = TestParam.host + "/api/user/add";
+
+            Map bodyParam = new HashMap();
+            bodyParam.put("userAccount", "import test add [userAccount]");
+            bodyParam.put("userName", "import test add [userName]");
+
+            Map headers = new HashMap();
+            headers.put("content-type", "application/json");
+
+            String result = HttpUtil.post(url, bodyParam, null, headers);
+            System.out.println(result);
+        }
+
+
+    }
+
     private String crudAdd() {
 
         String url = TestParam.host + "/api/user/add";

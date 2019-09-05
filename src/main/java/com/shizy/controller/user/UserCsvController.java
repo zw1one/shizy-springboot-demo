@@ -1,5 +1,6 @@
 package com.shizy.controller.user;
 
+import com.alibaba.excel.exception.ExcelAnalysisException;
 import com.alibaba.fastjson.JSONObject;
 import com.shizy.common.json.JsonResult;
 import com.shizy.service.user.UserCsvService;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.io.InputStream;
 import java.util.Map;
 
 @RestController
@@ -56,6 +56,8 @@ public class UserCsvController {
             return JsonResult.success(rtn);
 
         } catch (DuplicateKeyException e) {
+            return JsonResult.fail("primary key duplicate: [" + FormatUtil.getDuplicateKey(e.getMessage()) + "]");
+        } catch (ExcelAnalysisException e) {
             return JsonResult.fail("primary key duplicate: [" + FormatUtil.getDuplicateKey(e.getMessage()) + "]");
         } catch (Exception e) {
             throw e;

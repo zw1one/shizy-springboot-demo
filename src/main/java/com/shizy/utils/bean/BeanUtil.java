@@ -14,12 +14,6 @@ import java.util.Map;
 
 public class BeanUtil {
 
-    /**
-     * 如果一个参数，他不是string，你要把get他然后toString，如果他不存在，get出来就是null，null.toString()就gg
-     */
-//    public static String getString(Map map, String param) {
-//        return map.containsKey(param) ? map.get(param).toString() : null;
-//    }
 
     /***********************************************************/
 
@@ -54,6 +48,20 @@ public class BeanUtil {
         }
 
         return entity;
+    }
+
+    public static <T> List<T> copyMapParam2EntityList(List<Map> paramList, T entity) {
+        List<T> list = new ArrayList<>();
+        for (Map map : paramList) {
+            try {
+                list.add(copyMapParam2Entity(map, (T) entity.getClass().newInstance()));
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
     }
 
     public static <S, T> T copyParam2Entity(S source, T target, String[] ignoreFields) {
