@@ -37,6 +37,7 @@ public class UserServiceImpl2 implements UserService {
         if (StringUtils.isBlank(id)) {
             return null;
         }
+
         return userMapper.selectById(id);
     }
 
@@ -50,7 +51,6 @@ public class UserServiceImpl2 implements UserService {
         if (userPo == null) {
             return null;
         }
-
         return BeanUtil.copyParam2Entity(userPo, new UserVo());
     }
 
@@ -78,7 +78,6 @@ public class UserServiceImpl2 implements UserService {
 
     @Override
     public String add(UserPo po) {
-
         String id = IdUtil.genUUID();
         po.setUserId(id);
 
@@ -91,7 +90,6 @@ public class UserServiceImpl2 implements UserService {
 
     @Override
     public boolean delete(String id) {
-
         if (StringUtils.isBlank(id)) {
             return false;
         }
@@ -105,7 +103,6 @@ public class UserServiceImpl2 implements UserService {
 
     @Override
     public int deleteBatch(List ids) {
-
         if (ids == null || ids.size() <= 0) {
             return -1;
         }
@@ -124,7 +121,6 @@ public class UserServiceImpl2 implements UserService {
         }
 
         int result = userMapper.updateById(po);
-
         if (result > 0) {
             return true;
         }
