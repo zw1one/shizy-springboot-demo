@@ -24,6 +24,8 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
     //读了callbackSize条，调一次callback。读完该页，也会调一次callback
     private int callbackSize;
 
+    private Map<String, String> titleMap;//列中文名 -> 列名
+
     private List<String> titles;//列名
     private List<Map> data = new ArrayList();//数据
 
@@ -31,6 +33,12 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
         this.headLineMun = headLineMun;
         this.readCallback = readCallback;
         this.callbackSize = callbackSize;
+    }
+    public CallbackAnalysisEventListener(Integer headLineMun, ReadCallback readCallback, int callbackSize, Map<String, String> titleMap) {
+        this.headLineMun = headLineMun;
+        this.readCallback = readCallback;
+        this.callbackSize = callbackSize;
+        this.titleMap = titleMap;
     }
 
     public CallbackAnalysisEventListener(Integer headLineMun, ReadCallback readCallback) {
@@ -48,8 +56,17 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
         List<String> rowData = (List<String>) object;
         //取title
         if (context.getCurrentRowNum().equals(headLineMun)) {
-            titles = rowData;
-            return;
+            if (titleMap == null) {
+                titles = rowData;
+                return;
+            } else {
+                List titleEn = new ArrayList();
+                for (String cnname : rowData) {
+                    titleEn.add(titleMap.get(cnname));
+                }
+                titles = titleEn;
+                return;
+            }
         }
         //set data
         Map rowMap = new HashMap<String, Object>();

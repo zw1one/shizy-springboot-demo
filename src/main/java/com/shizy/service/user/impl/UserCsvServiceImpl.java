@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,15 @@ public class UserCsvServiceImpl implements UserCsvService {
 
     /***********************************************/
 
+    private static Map<String, String> titleMap = new HashMap<>();
+
+    static {
+        //列中文名 - po成员变量名
+        titleMap.put("用户编号", "userId");
+        titleMap.put("用户名", "userName");
+        titleMap.put("用户账号", "userAccount");
+    }
+
     @Override
     //默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -59,7 +69,7 @@ public class UserCsvServiceImpl implements UserCsvService {
                 for (int[] batchSum : insertRst) {
                     insertSum[0] += batchSum.length;
                 }
-            }, 5000);
+            }, 5000, titleMap);
 
         }
 
