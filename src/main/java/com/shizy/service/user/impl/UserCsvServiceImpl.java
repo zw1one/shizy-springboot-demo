@@ -1,8 +1,10 @@
 package com.shizy.service.user.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.entity.user.UserPo;
 import com.shizy.service.user.UserCsvService;
+import com.shizy.service.user.UserService;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.excel.EasyExcelUtil;
 import com.shizy.utils.jdbc.InserBatchUtil;
@@ -30,8 +32,8 @@ import java.util.Map;
 @Service
 public class UserCsvServiceImpl implements UserCsvService {
 
-//    @Autowired
-//    private UserMapper userMapper;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -88,12 +90,36 @@ public class UserCsvServiceImpl implements UserCsvService {
 
     @Override
     public void exportData(Map<String, Object> params) {
+        getExportList(1, 5000);
 
-        System.out.println();
+    }
+
+    private void getExportList(int page, int pageSize){
+
+        Page pageRecord = userService.queryList(null, new Page(page, pageSize));
+        List data = pageRecord.getRecords();
+        afterQueryDo(data);
+        if(data.size() != 0){
+            getExportList(++page, pageSize);
+        }
+    }
+
+    private void afterQueryDo(List data){
+        System.out.println(data.size());
 
     }
 
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

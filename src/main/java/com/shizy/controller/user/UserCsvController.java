@@ -81,7 +81,7 @@ public class UserCsvController {
 
     @ApiOperation(value = "export user data", notes = "")
     @RequestMapping(value = "/user/exportData", method = RequestMethod.GET)
-    public JsonResult exportData(@RequestParam Map<String, Object> params) {
+    public JsonResult exportData(@RequestParam(required = false) Map<String, Object> params) {
         try {
             userCsvService.exportData(params);
             return JsonResult.success();

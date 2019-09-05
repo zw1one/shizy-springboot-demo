@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     public Page queryList(UserDto dto, Page page) {
         Wrapper wrapper = QueryUtil.getEntityCondition(dto, new UserPo());
 
-        if (dto.getNameAndAccount() != null && wrapper != null) {
+        if (dto != null && dto.getNameAndAccount() != null && wrapper != null) {
             String param = dto.getNameAndAccount();
             wrapper.andNew()
                     .like("user_account", param)
