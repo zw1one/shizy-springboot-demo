@@ -15,7 +15,7 @@ shizy-springboot-demo
 
 ```
 CREATE DATABASE test;
-
+USE test;
 CREATE TABLE `user`  (
   `user_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_account` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,

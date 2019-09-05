@@ -96,6 +96,9 @@ public class QueryUtil<PO, DTO> {
             }
         });
 
+        //todo 多主键排序
+        entityWrapper.orderBy("", true);
+
         return entityWrapper;
     }
 
