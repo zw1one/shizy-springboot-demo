@@ -65,7 +65,7 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
         //读一页的数据时，list达到调用一次callbackSize时，调用一次callback。否则list过大会溢栈
         if (data.size() >= callbackSize) {
             readCallback.doAfterReadSheel(context, data);
-            logger.info("-- " + "commit sheet " + context.getCurrentSheet().getSheetNo() + " [" + context.getCurrentSheet().getSheetName() + "]" + " 提交数：" + data.size());
+            logger.info("-- " + "readed sheet " + context.getCurrentSheet().getSheetNo() + " [" + context.getCurrentSheet().getSheetName() + "]" + " read size：" + data.size());
             data = new ArrayList();//清空上一次的data
         }
     }
@@ -80,7 +80,7 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
         }
 
         readCallback.doAfterReadSheel(context, data);
-        logger.info("-- " + "commit sheet " + context.getCurrentSheet().getSheetNo() + " [" + context.getCurrentSheet().getSheetName() + "]" + " 提交数：" + data.size());
+        logger.info("-- " + "readed sheet " + context.getCurrentSheet().getSheetNo() + " [" + context.getCurrentSheet().getSheetName() + "]" + " read size：" + data.size());
         data = new ArrayList();//清空上一次的data
     }
 }

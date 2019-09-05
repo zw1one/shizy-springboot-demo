@@ -49,18 +49,18 @@ public class UserCsvServiceImpl implements UserCsvService {
         try (InputStream inputStream = file.getInputStream()) {
             UserPo po = new UserPo();
 
+            //读excel的回调函数，触发条件为：读完一页，或者一页读了5000条。
             EasyExcelUtil.read(inputStream, (context, data) -> {
-                //读excel的回调函数，回调触发为：读完一页，或者一页读了1000条。
                 List inserted = BeanUtil.copyMapParam2EntityList(data, po);
+
+                //批量写入数据库
                 int[][] insertRst = inserBatchUtil.insertBatch(inserted);
 
                 for (int[] batchSum : insertRst) {
                     insertSum[0] += batchSum.length;
                 }
-            });
+            }, 5000);
 
-        } catch (IOException e) {
-            throw e;
         }
 
         return genReturn(insertSum[0], file.getOriginalFilename());
