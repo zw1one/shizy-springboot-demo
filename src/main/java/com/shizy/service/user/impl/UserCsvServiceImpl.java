@@ -47,6 +47,12 @@ public class UserCsvServiceImpl implements UserCsvService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)//默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
     public void importData(InputStream inputStream, Map<String, Object> params){
 
+        //todo poi or fastExcel 两种方式读写excel
+
+        /**
+         * 今天把导入导出的两种弄好 明天弄原生mybatis crud 导入导出
+         */
+
         List z = new ArrayList();
         z.add(new UserPo("1", "2", "3"));
         z.add(new UserPo("2", "2", "3"));

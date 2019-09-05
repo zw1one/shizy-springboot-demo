@@ -2,7 +2,7 @@ package com.shizy.utils.jdbc;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.shizy.entity.user.UserPo;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.shizy.utils.bean.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,8 +24,14 @@ public class InserBatchUtil {
 
     public <PO> int[][] insertBatch(List<PO> data, int batchSize) {
 
-        List<Field> fields = getFields(data.get(0));
-        String sql = getInsertSql(data.get(0));
+        if (data == null) {
+            return null;
+        }
+
+        Class poClass = data.get(0).getClass();
+
+        List<Field> fields = getFields(poClass);
+        String sql = getInsertSql(poClass, fields);
 
         int[][] updateCounts = jdbcTemplate.batchUpdate(
                 sql,
@@ -43,25 +49,59 @@ public class InserBatchUtil {
         return updateCounts;
     }
 
-    private <PO> String getInsertSql(PO po) {
-        Class poClass = po.getClass();
+    private String getInsertSql(Class poClass, List<Field> fields) {
 
-        String tableName = "user";
-        String columns = "user_id, user_account, user_name";
-        String valueColumns = "?, ?, ?";
+        String tableName = getPoTableName(poClass);
+        String columns = getPoColumns(poClass, fields);
+        String valueColumns = getValueColumns(poClass, fields);
 
         String sql = "INSERT INTO " + tableName + " (" + columns + ") VALUES (" + valueColumns + ")";
-
         return sql;
     }
 
-    private <PO> List getFields(PO po) {
-        List<Field> fieldNames = new ArrayList();
+    private String getPoTableName(Class clazz) {
+        TableName tableName = (TableName) clazz.getAnnotation(TableName.class);
+        if (tableName == null) {
+            return null;
+        }
+        return tableName.value();
+    }
 
-        Class poClass = po.getClass();
+    private String getPoColumns(Class clazz, List<Field> fields) {
+        StringBuilder str = new StringBuilder();
+        for (Field field : fields) {
+            String columns = null;
+            TableId tableId = field.getAnnotation(TableId.class);
+            if(tableId != null){
+                columns = tableId.value();
+            }
+            TableField tableField = field.getAnnotation(TableField.class);
+            if(tableField != null){
+                columns = tableField.value();
+            }
+
+            if(columns == null){
+                continue;
+            }
+            str.append(columns).append(", ");
+        }
+        String rtnStr = str.toString().substring(0, str.length() - ", ".length());
+        return rtnStr;
+    }
+
+    private String getValueColumns(Class clazz, List<Field> fields) {
+        StringBuilder str = new StringBuilder();
+        for (Field field : fields) {
+            str.append("?").append(", ");
+        }
+        String rtnStr = str.toString().substring(0, str.length() - ", ".length());
+        return rtnStr;
+    }
+
+    private List getFields(Class poClass) {
+        List<Field> fieldNames = new ArrayList();
         for (Field field : poClass.getDeclaredFields()) {
             field.setAccessible(true);
-
             if (field.getAnnotation(TableId.class) == null && field.getAnnotation(TableField.class) == null) {
                 continue;
             }
