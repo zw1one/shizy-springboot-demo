@@ -1,12 +1,8 @@
 package com.shizy.service.user;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.shizy.entity.user.UserDto;
-import com.shizy.entity.user.UserPo;
-import com.shizy.entity.user.UserVo;
+import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,7 +15,7 @@ import java.util.Map;
  */
 public interface UserCsvService {
 
-    public void importData(InputStream inputStream, Map<String, Object> params) throws Exception;
+    public JSONObject importData(MultipartFile file, Map<String, Object> params) throws Exception;
 
     public void exportData(Map<String, Object> params);
 }

@@ -1,5 +1,6 @@
 package com.shizy.service.user.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.shizy.entity.user.UserPo;
 import com.shizy.service.user.UserCsvService;
 import com.shizy.utils.jdbc.InserBatchUtil;
@@ -8,13 +9,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <p>
@@ -29,9 +30,6 @@ public class UserCsvServiceImpl implements UserCsvService {
 
 //    @Autowired
 //    private UserMapper userMapper;
-//
-//    @Autowired
-//    private CacheUtil<String, String, UserVo> cacheUtil;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -39,13 +37,41 @@ public class UserCsvServiceImpl implements UserCsvService {
     @Autowired
     private InserBatchUtil inserBatchUtil;
 
-
     /***********************************************/
 
-
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)//默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
-    public void importData(InputStream inputStream, Map<String, Object> params){
+    //默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public JSONObject importData(MultipartFile file, Map<String, Object> params) {
+
+        try (InputStream inputStream = file.getInputStream()) {
+
+            System.out.println(inputStream);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List inserted = readExcel();
+        int[][] insertRst = inserBatchUtil.insertBatch(inserted);
+
+        return genReturn(insertRst, file.getOriginalFilename());
+    }
+
+    private JSONObject genReturn(int[][] insertRst, String fileName) {
+        JSONObject rtn = new JSONObject();
+        rtn.put("file name", fileName);
+
+        int insertSum = 0;
+        for (int[] batch : insertRst) {
+            insertSum += batch.length;
+        }
+        rtn.put("insert sum", insertSum);
+
+        return rtn;
+    }
+
+    private List readExcel() {
 
         //todo poi or fastExcel 两种方式读写excel
 
@@ -58,10 +84,11 @@ public class UserCsvServiceImpl implements UserCsvService {
         z.add(new UserPo("2", "2", "3"));
 //        z.add(new UserPo("2", "2", "3"));
 
-        inserBatchUtil.insertBatch(z);
+        return z;
 
-        System.out.println();
     }
+
+    /***********************************************************/
 
     @Override
     public void exportData(Map<String, Object> params) {
@@ -69,27 +96,6 @@ public class UserCsvServiceImpl implements UserCsvService {
         System.out.println();
 
     }
-
-    public static void main(String[] args) {
-
-        String s = "PreparedStatementCallback; SQL [INSERT INTO user (user_id, user_account, user_name) VALUES (?, ?, ?)Duplicate entry '123' for key 'PRIMARY'; nested exception is java.sql.BatchUpdateException: Duplicate entry '123' for key 'PRIMARY'";
-
-        System.out.println(new UserCsvServiceImpl().getDuplicateKey(s));
-    }
-
-    private String getDuplicateKey(String emsg) {
-        Pattern p = Pattern.compile("Duplicate entry '.*' for key 'PRIMARY';");
-        Matcher m = p.matcher(emsg);
-
-        String match = null;
-        if (m.find()) {
-            match = m.group();
-        }
-        match = match.substring("Duplicate entry ".length(), match.indexOf(" for key 'PRIMARY';"));
-        match = match.substring(1, match.length() - 1);
-        return match;
-    }
-
 
 }
 

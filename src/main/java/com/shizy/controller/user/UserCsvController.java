@@ -1,5 +1,6 @@
 package com.shizy.controller.user;
 
+import com.alibaba.fastjson.JSONObject;
 import com.shizy.common.json.JsonResult;
 import com.shizy.service.user.UserCsvService;
 import com.shizy.utils.format.FormatUtil;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.InputStream;
 import java.util.Map;
@@ -28,6 +30,8 @@ public class UserCsvController {
     @Autowired
     private UserCsvService userCsvService;
 
+    /**************************************************************/
+
     @ApiOperation(value = "import user data", notes = "")
     @RequestMapping(value = "/user/importData", method = RequestMethod.POST)
     public JsonResult importData(@RequestParam("file") MultipartFile file, @RequestParam Map<String, Object> params) {
@@ -37,7 +41,7 @@ public class UserCsvController {
             }
 
             synchronized (UserCsvController.class) {
-                return importDataCatch(file.getInputStream(), params);
+                return importDataCatch(file, params);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -45,17 +49,33 @@ public class UserCsvController {
         }
     }
 
-    private JsonResult importDataCatch(InputStream inputStream, Map<String, Object> params) throws Exception {
-
+    private JsonResult importDataCatch(MultipartFile file, Map<String, Object> params) throws Exception {
         try {
-            userCsvService.importData(inputStream, params);
+
+            JSONObject rtn = userCsvService.importData(file, params);
+            return JsonResult.success(rtn);
+
         } catch (DuplicateKeyException e) {
             return JsonResult.fail("primary key duplicate: [" + FormatUtil.getDuplicateKey(e.getMessage()) + "]");
         } catch (Exception e) {
             throw e;
         }
-        return JsonResult.success();
     }
+
+    @ApiIgnore
+    @RequestMapping(value = "/user/importMultiData", method = RequestMethod.POST)
+    public JsonResult importMultiData(@RequestParam("files") MultipartFile[] files, @RequestParam Map<String, Object> params) {
+        try {
+
+            return JsonResult.success();
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return JsonResult.fail();
+        }
+    }
+
+    /**************************************************************/
 
     @ApiOperation(value = "export user data", notes = "")
     @RequestMapping(value = "/user/exportData", method = RequestMethod.GET)
