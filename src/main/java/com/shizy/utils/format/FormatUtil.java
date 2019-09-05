@@ -77,6 +77,9 @@ public class FormatUtil {
         if (m.find()) {
             match = m.group();
         }
+        if(match == null){
+            return emsg;
+        }
         match = match.substring("Duplicate entry ".length(), match.indexOf(" for key 'PRIMARY';"));
         match = match.substring(1, match.length() - 1);
         return match;
