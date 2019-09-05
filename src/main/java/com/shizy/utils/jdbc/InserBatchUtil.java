@@ -19,7 +19,7 @@ public class InserBatchUtil {
     private JdbcTemplate jdbcTemplate;
 
     public <PO> int[][] insertBatch(List<PO> data) {
-        return insertBatch(data, 5000);
+        return insertBatch(data, 1000);
     }
 
     public <PO> int[][] insertBatch(List<PO> data, int batchSize) {

@@ -50,7 +50,7 @@ public class UserCsvServiceImpl implements UserCsvService {
         List z = new ArrayList();
         z.add(new UserPo("1", "2", "3"));
         z.add(new UserPo("2", "2", "3"));
-        z.add(new UserPo("2", "2", "3"));
+//        z.add(new UserPo("2", "2", "3"));
 
         inserBatchUtil.insertBatch(z);
 
