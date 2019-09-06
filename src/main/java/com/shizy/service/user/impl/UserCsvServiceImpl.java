@@ -1,8 +1,8 @@
 package com.shizy.service.user.impl;
 
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.metadata.Sheet;
-import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.entity.user.UserPo;
@@ -18,11 +18,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,32 +103,59 @@ public class UserCsvServiceImpl implements UserCsvService {
 
     }
 
-    private void getExportList(int page, int pageSize){
+    private void getExportList(int page, int pageSize) {
 
         Page pageRecord = userService.queryList(null, new Page(page, pageSize));
         List data = pageRecord.getRecords();
         afterQueryDo(data);
-        if(data.size() != 0){
+        if (data.size() != 0) {
             getExportList(++page, pageSize);
         }
     }
 
-    private void afterQueryDo(List data){
+    @Autowired
+    private HttpServletResponse response;
+
+    private void afterQueryDo(List data) {
+
         System.out.println(data.size());
 
+
     }
 
-    public static void main(String[] args) {
-//        try {
-//
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-    }
 
 }
 
+class ExportExcel {
+
+    ExcelWriter excelWriter = null;
+
+    WriteSheet writeSheet = null;
+
+    private void init(HttpServletResponse response) {
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        response.setHeader("Content-disposition", "attachment;filename=demo.xlsx");
+
+
+        try {
+            excelWriter = EasyExcel.write(response.getOutputStream(), UserPo.class).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        writeSheet = EasyExcel.writerSheet("data").build();
+
+        /// 千万别忘记finish 会帮忙关闭流
+        excelWriter.finish();
+    }
+
+    private void write(List data) {
+        // 第一次写入会创建头
+        excelWriter.write(data, writeSheet);
+    }
+
+
+}
 
 
 
