@@ -12,7 +12,9 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class QueryUtil<PO, DTO> {
@@ -62,7 +64,7 @@ public class QueryUtil<PO, DTO> {
             //读取dto上的QueryParam注解
             Field dtoFieldObj = dto.getClass().getDeclaredField(field);
             QueryParam qpAnno = dtoFieldObj.getAnnotation(QueryParam.class);
-            //dtoFieldObj.setAccessible(true);//get注解好像不需要这个，而且这个不稳定，可以被java安全机制禁用掉
+            //dtoFieldObj.setAccessible(true);//get注解好像不需要这个，这个可能被java安全机制禁用掉
 
             if (qpAnno == null) {
                 continue;
@@ -96,10 +98,23 @@ public class QueryUtil<PO, DTO> {
             }
         });
 
-        //todo 多主键排序
-        entityWrapper.orderBy("", true);
+        //主键排序
+        orderByPrimaryKey(entityWrapper);
 
         return entityWrapper;
+    }
+
+    private static void orderByPrimaryKey(Wrapper wrapper) {
+        List keyList = new ArrayList();
+
+        Field[] fields = wrapper.getEntity().getClass().getDeclaredFields();
+        for (Field field : fields) {
+            TableId tableId = field.getAnnotation(TableId.class);
+            if (tableId != null) {
+                keyList.add(tableId.value());
+            }
+        }
+        wrapper.orderAsc(keyList);
     }
 
     //根据field从po得到数据库列名
