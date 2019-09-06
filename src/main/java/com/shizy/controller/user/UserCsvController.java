@@ -34,7 +34,8 @@ public class UserCsvController {
 
     @ApiOperation(value = "import user data", notes = "")
     @RequestMapping(value = "/user/importData", method = RequestMethod.POST)
-    public JsonResult importData(@RequestParam("file") MultipartFile file, @RequestParam Map<String, Object> params) {
+    public JsonResult importData(@RequestParam("file") MultipartFile file,
+                                 @RequestParam(required = false) Map<String, Object> params) {
         try {
             if (file == null || file.isEmpty()) {
                 return JsonResult.fail("file is null");
@@ -66,7 +67,8 @@ public class UserCsvController {
 
     @ApiIgnore
     @RequestMapping(value = "/user/importMultiData", method = RequestMethod.POST)
-    public JsonResult importMultiData(@RequestParam("files") MultipartFile[] files, @RequestParam Map<String, Object> params) {
+    public JsonResult importMultiData(@RequestParam("files") MultipartFile[] files,
+                                      @RequestParam Map<String, Object> params) {
         try {
 
             return JsonResult.success();

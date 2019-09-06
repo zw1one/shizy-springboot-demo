@@ -1,5 +1,8 @@
 package com.shizy.service.user.impl;
 
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.metadata.Sheet;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.entity.user.UserPo;
@@ -15,8 +18,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +52,10 @@ public class UserCsvServiceImpl implements UserCsvService {
     private static Map<String, String> titleMap = new HashMap<>();
 
     static {
+        /**
+         * 若切换到easyexcel则不需要这个，会按字段的顺序对应excel的顺序，中英文转换通过注解
+         */
+
         //列中文名 - po成员变量名
         titleMap.put("用户编号", "userId");
         titleMap.put("用户名", "userName");
@@ -92,6 +102,7 @@ public class UserCsvServiceImpl implements UserCsvService {
     public void exportData(Map<String, Object> params) {
         getExportList(1, 5000);
 
+
     }
 
     private void getExportList(int page, int pageSize){
@@ -107,6 +118,15 @@ public class UserCsvServiceImpl implements UserCsvService {
     private void afterQueryDo(List data){
         System.out.println(data.size());
 
+    }
+
+    public static void main(String[] args) {
+//        try {
+//
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

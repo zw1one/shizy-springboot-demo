@@ -87,7 +87,7 @@ mybatis-plus:
   configuration: # 原生配置
     map-underscore-to-camel-case: true
     cache-enabled: false
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志输出sql语句
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志输出sql语句
 
 
 
