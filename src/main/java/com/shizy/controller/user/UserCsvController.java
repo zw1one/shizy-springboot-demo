@@ -40,39 +40,21 @@ public class UserCsvController {
             if (file == null || file.isEmpty()) {
                 return JsonResult.fail("file is null");
             }
-
             synchronized (UserCsvController.class) {
-                return importDataCatch(file, params);
+                JSONObject rtn = userCsvService.importData(file, params);
+                return JsonResult.success(rtn);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return JsonResult.fail();
-        }
-    }
-
-    private JsonResult importDataCatch(MultipartFile file, Map<String, Object> params) throws Exception {
-        try {
-
-            JSONObject rtn = userCsvService.importData(file, params);
-            return JsonResult.success(rtn);
-
-        } catch (DuplicateKeyException e) {
-            return JsonResult.fail("primary key duplicate: [" + FormatUtil.getDuplicateKey(e.getMessage()) + "]");
-        } catch (ExcelAnalysisException e) {
-            return JsonResult.fail("primary key duplicate: [" + FormatUtil.getDuplicateKey(e.getMessage()) + "]");
-        } catch (Exception e) {
-            throw e;
+            return JsonResult.fail(e.getMessage());
         }
     }
 
     @ApiIgnore
     @RequestMapping(value = "/user/importMultiData", method = RequestMethod.POST)
-    public JsonResult importMultiData(@RequestParam("files") MultipartFile[] files,
-                                      @RequestParam Map<String, Object> params) {
+    public JsonResult importMultiData(@RequestParam("files") MultipartFile[] files,@RequestParam Map<String, Object> params) {
         try {
-
             return JsonResult.success();
-
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return JsonResult.fail();

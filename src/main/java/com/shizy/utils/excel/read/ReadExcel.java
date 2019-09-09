@@ -14,7 +14,7 @@ public class ReadExcel {
     private Integer headLineMun;
     private ReadCallback readCallback;
     private int callbackSize;
-    private Map titleMap;
+    private Class head;
 
     public ReadExcel(InputStream inputStream, Integer headLineMun, ReadCallback readCallback) {
         this.inputStream = inputStream;
@@ -30,12 +30,12 @@ public class ReadExcel {
         this.callbackSize = callbackSize;
     }
 
-    public ReadExcel(InputStream inputStream, Integer headLineMun, ReadCallback readCallback, int callbackSize, Map<String, String> titleMap) {
+    public ReadExcel(InputStream inputStream, Integer headLineMun, ReadCallback readCallback, int callbackSize, Class head) {
         this.inputStream = inputStream;
         this.headLineMun = headLineMun;
         this.readCallback = readCallback;
         this.callbackSize = callbackSize;
-        this.titleMap = titleMap;
+        this.head = head;
     }
 
     public ReadExcel() {
@@ -44,10 +44,11 @@ public class ReadExcel {
 
     /**
      * 旧版read
+     * easyexcel的新版还在迭代中，功能不一定稳定，代码写法也不一定就是现在的模式。暂时不用新版重写了。
      */
     public void read() {
         final ExcelReader excelReader = new ExcelReader(inputStream, null,
-                new CallbackAnalysisEventListener(headLineMun, readCallback, callbackSize, titleMap));
+                new CallbackAnalysisEventListener(headLineMun, readCallback, callbackSize, head));
 
         for (Sheet sheet : excelReader.getSheets()) {
             excelReader.read(sheet);
@@ -58,8 +59,8 @@ public class ReadExcel {
     /**
      * 新版read
      * 待修改：
-     * 1、Listener里面要加泛型，要改类型转换
-     * 2、新版读取时发生异常，会导致excel损坏，虽然对上传来的文件无所谓
+     * 1、Listener里面要加泛型，要改类型转换。旧版的做法是自己手动处理类型
+     * 2、新版读取时发生异常时，会导致excel损坏，虽然对上传来的文件无所谓
      */
 //    public void read() {
 //

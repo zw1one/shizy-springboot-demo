@@ -1,6 +1,7 @@
 package com.shizy.entity.user;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import lombok.Data;
 
 /**
  * <p>
@@ -10,6 +11,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
  * @author shizy
  * @since 2019-08-19
  */
+@Data
 public class UserExp {
 
     @ExcelProperty("用户id")

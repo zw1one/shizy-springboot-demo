@@ -2,6 +2,7 @@ package com.shizy.service.user.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.shizy.entity.user.UserExp;
 import com.shizy.entity.user.UserPo;
 import com.shizy.service.user.UserCsvService;
 import com.shizy.service.user.UserService;
@@ -34,37 +35,21 @@ import java.util.Map;
 @Service
 public class UserCsvServiceImpl implements UserCsvService {
 
-    /***********************************************/
-
-    private static Map<String, String> titleMap = new HashMap<>();
-
-    static {
-        /**
-         * 若切换到easyexcel则不需要这个，会按字段的顺序对应excel的顺序，中英文转换通过注解
-         */
-
-        //列中文名 - po成员变量名
-        titleMap.put("用户id", "userId");
-        titleMap.put("用户名", "userName");
-        titleMap.put("用户账号", "userAccount");
-    }
-
-    ExportExcel exportExcel = null;
     @Autowired
     private UserService userService;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private InserBatchUtil inserBatchUtil;
-    /***********************************************************/
 
     @Autowired
-    private HttpServletResponse response;
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private InserBatchUtil inserBatchUtil;
+
+    /***********************************************/
 
     @Override
     //默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public JSONObject importData(MultipartFile file, Map<String, Object> params) throws IOException {
+    public JSONObject importData(MultipartFile file, Map<String, Object> params) throws Exception {
 
         final int[] insertSum = {0};
         try (InputStream inputStream = file.getInputStream()) {
@@ -80,8 +65,10 @@ public class UserCsvServiceImpl implements UserCsvService {
                 for (int[] batchSum : insertRst) {
                     insertSum[0] += batchSum.length;
                 }
-            }, 5000, titleMap);
+            }, 5000, UserExp.class);
 
+        }catch (Exception e){
+            throw e;
         }
 
         return genReturn(insertSum[0], file.getOriginalFilename());
@@ -94,11 +81,19 @@ public class UserCsvServiceImpl implements UserCsvService {
         return rtn;
     }
 
+
+    /***********************************************************/
+
+    @Autowired
+    private HttpServletResponse response;
+
+    ExportExcel exportExcel = null;
+
     @Override
     public void exportData(Map<String, Object> params) {
 
         exportExcel = EasyExcelUtil.getExportExcel();
-        exportExcel.init("user_export.xlsx", response, UserPo.class);
+        exportExcel.init("user_export.xlsx", response, UserExp.class);
 
         /**
          * 边查库边写入，避免一次查询数据过多内存溢出
@@ -114,7 +109,7 @@ public class UserCsvServiceImpl implements UserCsvService {
         List data = pageRecord.getRecords();
         afterQueryDo(data);
         if (data.size() != 0) {
-            getExportList(++page, pageSize);
+//            getExportList(++page, pageSize);
         }
     }
 

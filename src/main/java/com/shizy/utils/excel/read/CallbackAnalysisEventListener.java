@@ -1,11 +1,13 @@
 package com.shizy.utils.excel.read;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.shizy.utils.excel.EasyExcelUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,7 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
     //读了callbackSize条，调一次callback。读完该页，也会调一次callback
     private int callbackSize;
 
-    private Map<String, String> titleMap;//列中文名 -> 列名
+    private Class head;//列中文名 -> 列名
 
     private List<String> titles;//列名
     private List<Map> data = new ArrayList();//数据
@@ -35,11 +37,11 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
         this.callbackSize = callbackSize;
     }
 
-    public CallbackAnalysisEventListener(Integer headLineMun, ReadCallback readCallback, int callbackSize, Map<String, String> titleMap) {
+    public CallbackAnalysisEventListener(Integer headLineMun, ReadCallback readCallback, int callbackSize, Class head) {
         this.headLineMun = headLineMun;
         this.readCallback = readCallback;
         this.callbackSize = callbackSize;
-        this.titleMap = titleMap;
+        this.head = head;
     }
 
     public CallbackAnalysisEventListener(Integer headLineMun, ReadCallback readCallback) {
@@ -57,25 +59,16 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
         List<String> rowData = (List<String>) object;
         //取title
         if (context.getCurrentRowNum().equals(headLineMun)) {
-            if (titleMap == null) {
-                titles = rowData;
-                return;
-            } else {
-                List titleEn = new ArrayList();
-                for (String cnname : rowData) {
-                    titleEn.add(titleMap.get(cnname));
-                }
-                titles = titleEn;
-                return;
-            }
+            titles = getTitle(rowData, head);
+            return;
         }
         //set data
         Map rowMap = new HashMap<String, Object>();
         for (int i = 0; i < rowData.size(); i++) {
             String rowStr = rowData.get(i);
-            if (rowStr != null) {
-                rowStr = rowStr;
-            }
+//            if (rowStr != null) {
+//                rowStr = rowStr;
+//            }
             rowMap.put(titles.get(i), rowStr);
         }
         data.add(rowMap);
@@ -86,6 +79,23 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
             logger.info("-- " + "readed sheet " + context.getCurrentSheet().getSheetNo() + " [" + context.getCurrentSheet().getSheetName() + "]" + " read size：" + data.size());
             data = new ArrayList();//清空上一次的data
         }
+    }
+
+    private List getTitle(List<String> rowData, Class head) {
+        if (head == null) {
+            return rowData;
+        }
+
+        List titleEn = new ArrayList();
+
+        for (Field field : head.getDeclaredFields()) {
+            ExcelProperty excelProperty = field.getAnnotation(ExcelProperty.class);
+            if(excelProperty == null){
+                continue;
+            }
+            titleEn.add(field.getName());
+        }
+        return titleEn;
     }
 
     /**
