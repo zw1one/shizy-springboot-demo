@@ -1,13 +1,8 @@
 package com.shizy.utils.excel.read;
 
-import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.metadata.Sheet;
-import com.alibaba.excel.read.metadata.ReadSheet;
-import com.shizy.entity.user.UserPo;
-import org.junit.Test;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -27,13 +22,15 @@ public class ReadExcel {
         this.readCallback = readCallback;
         this.callbackSize = 1000;
     }
+
     public ReadExcel(InputStream inputStream, Integer headLineMun, ReadCallback readCallback, int callbackSize) {
         this.inputStream = inputStream;
         this.headLineMun = headLineMun;
         this.readCallback = readCallback;
         this.callbackSize = callbackSize;
     }
-    public ReadExcel(InputStream inputStream, Integer headLineMun, ReadCallback readCallback, int callbackSize, Map<String,String> titleMap) {
+
+    public ReadExcel(InputStream inputStream, Integer headLineMun, ReadCallback readCallback, int callbackSize, Map<String, String> titleMap) {
         this.inputStream = inputStream;
         this.headLineMun = headLineMun;
         this.readCallback = readCallback;
@@ -84,8 +81,6 @@ public class ReadExcel {
 //        }
 //
 //    }
-
-
 
 
 }

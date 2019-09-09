@@ -1,8 +1,5 @@
 package com.shizy.service.user.impl;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.entity.user.UserPo;
@@ -10,6 +7,7 @@ import com.shizy.service.user.UserCsvService;
 import com.shizy.service.user.UserService;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.excel.EasyExcelUtil;
+import com.shizy.utils.excel.write.ExportExcel;
 import com.shizy.utils.jdbc.InserBatchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,15 +34,6 @@ import java.util.Map;
 @Service
 public class UserCsvServiceImpl implements UserCsvService {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private InserBatchUtil inserBatchUtil;
-
     /***********************************************/
 
     private static Map<String, String> titleMap = new HashMap<>();
@@ -55,10 +44,22 @@ public class UserCsvServiceImpl implements UserCsvService {
          */
 
         //列中文名 - po成员变量名
-        titleMap.put("用户编号", "userId");
+        titleMap.put("用户id", "userId");
         titleMap.put("用户名", "userName");
         titleMap.put("用户账号", "userAccount");
     }
+
+    ExportExcel exportExcel = null;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private InserBatchUtil inserBatchUtil;
+    /***********************************************************/
+
+    @Autowired
+    private HttpServletResponse response;
 
     @Override
     //默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
@@ -93,14 +94,18 @@ public class UserCsvServiceImpl implements UserCsvService {
         return rtn;
     }
 
-
-    /***********************************************************/
-
     @Override
     public void exportData(Map<String, Object> params) {
+
+        exportExcel = EasyExcelUtil.getExportExcel();
+        exportExcel.init("user_export.xlsx", response, UserPo.class);
+
+        /**
+         * 边查库边写入，避免一次查询数据过多内存溢出
+         */
         getExportList(1, 5000);
 
-
+        exportExcel.finish();
     }
 
     private void getExportList(int page, int pageSize) {
@@ -113,49 +118,14 @@ public class UserCsvServiceImpl implements UserCsvService {
         }
     }
 
-    @Autowired
-    private HttpServletResponse response;
-
     private void afterQueryDo(List data) {
-
-        System.out.println(data.size());
-
-
+        exportExcel.write(data);
     }
-
 
 }
 
-class ExportExcel {
-
-    ExcelWriter excelWriter = null;
-
-    WriteSheet writeSheet = null;
-
-    private void init(HttpServletResponse response) {
-        response.setContentType("application/vnd.ms-excel");
-        response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-disposition", "attachment;filename=demo.xlsx");
 
 
-        try {
-            excelWriter = EasyExcel.write(response.getOutputStream(), UserPo.class).build();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        writeSheet = EasyExcel.writerSheet("data").build();
-
-        /// 千万别忘记finish 会帮忙关闭流
-        excelWriter.finish();
-    }
-
-    private void write(List data) {
-        // 第一次写入会创建头
-        excelWriter.write(data, writeSheet);
-    }
-
-
-}
 
 
 

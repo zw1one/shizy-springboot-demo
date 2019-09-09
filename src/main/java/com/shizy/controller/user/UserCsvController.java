@@ -81,15 +81,13 @@ public class UserCsvController {
 
     /**************************************************************/
 
-    @ApiOperation(value = "export user data", notes = "")
+    @ApiOperation(value = "export user data", notes = "不要使用swagger测试导出，文件可能损坏")
     @RequestMapping(value = "/user/exportData", method = RequestMethod.GET)
-    public JsonResult exportData(@RequestParam(required = false) Map<String, Object> params) {
+    public void exportData(@RequestParam(required = false) Map<String, Object> params) {
         try {
             userCsvService.exportData(params);
-            return JsonResult.success();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return JsonResult.fail();
         }
     }
 
