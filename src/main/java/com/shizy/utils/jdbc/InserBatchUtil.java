@@ -22,6 +22,12 @@ public class InserBatchUtil {
         return insertBatch(data, 1000);
     }
 
+    /**
+     * 根据list的实体类类型批量插入
+     * 实体类需使用mybatis-plus注解
+     *
+     * @param batchSize 提交一个批次的数据条数
+     */
     public <PO> int[][] insertBatch(List<PO> data, int batchSize) {
 
         if (data == null) {

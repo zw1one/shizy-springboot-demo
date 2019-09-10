@@ -33,14 +33,18 @@
         };
 
         var exportData = function(){
-            $.ajax({
-                url: "/api/user/exportData?param1=123",
-                success: function (result) {
-                    // alert(JSON.stringify(result));
-                    // debugger;
-                },
-                type: "GET"
-            });
+
+            // $.ajax({
+            //     url: "/api/user/exportData?param1=123",
+            //     success: function (result) {
+            //         // alert(JSON.stringify(result));
+            //         // debugger;
+            //     },
+            //     type: "GET"
+            // });
+
+            window.location.href = "/api/user/exportData?param1=123";
+
         }
 
 

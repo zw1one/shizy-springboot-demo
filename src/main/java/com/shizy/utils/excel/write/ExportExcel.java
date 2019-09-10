@@ -3,6 +3,7 @@ package com.shizy.utils.excel.write;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,7 +30,10 @@ public class ExportExcel {
             return;
         }
 
-        excelWriter = EasyExcel.write(outputStream, clazz).build();
+        excelWriter = EasyExcel.write(outputStream, clazz)
+                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())//自动列宽
+                .build();
+
         writeSheet = EasyExcel.writerSheet("data").build();
 
     }

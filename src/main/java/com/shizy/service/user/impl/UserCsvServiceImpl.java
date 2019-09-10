@@ -10,6 +10,8 @@ import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.excel.EasyExcelUtil;
 import com.shizy.utils.excel.write.ExportExcel;
 import com.shizy.utils.jdbc.InserBatchUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +34,8 @@ import java.util.Map;
  */
 @Service
 public class UserCsvServiceImpl implements UserCsvService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserCsvServiceImpl.class);
 
     @Autowired
     private UserService userService;
@@ -51,12 +53,19 @@ public class UserCsvServiceImpl implements UserCsvService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public JSONObject importData(MultipartFile file, Map<String, Object> params) throws Exception {
 
+        logger.info("start import excel [" + file.getOriginalFilename() + "].");
+
         final int[] insertSum = {0};
+
         try (InputStream inputStream = file.getInputStream()) {
             UserPo po = new UserPo();
 
-            //读excel的回调函数，触发条件为：读完一页，或者一页读了5000条。
+            /**
+             * 边读取边写入数据库，避免一次内存中保存的查询数据过多内存溢出
+             */
             EasyExcelUtil.read(inputStream, (context, data) -> {
+                //读excel的回调函数，触发条件为：读完一页，或者一页读了5000条。
+
                 List inserted = BeanUtil.copyMapParam2EntityList(data, po);
 
                 //批量写入数据库
@@ -67,9 +76,9 @@ public class UserCsvServiceImpl implements UserCsvService {
                 }
             }, 5000, UserExp.class);
 
-        }catch (Exception e){
-            throw e;
         }
+
+        logger.info("import excel [" + file.getOriginalFilename() + "] successed. import record: " + insertSum[0]);
 
         return genReturn(insertSum[0], file.getOriginalFilename());
     }
@@ -88,17 +97,24 @@ public class UserCsvServiceImpl implements UserCsvService {
     private HttpServletResponse response;
 
     ExportExcel exportExcel = null;
+    int exportSum = 0;
 
     @Override
     public void exportData(Map<String, Object> params) {
 
+        String fileName = "user_data.xlsx";
+
         exportExcel = EasyExcelUtil.getExportExcel();
-        exportExcel.init("user_export.xlsx", response, UserExp.class);
+        exportExcel.init(fileName, response, UserExp.class);
+
+        logger.info("start export excel [" + fileName + "].");
 
         /**
          * 边查库边写入，避免一次查询数据过多内存溢出
          */
         getExportList(1, 5000);
+
+        logger.info("export excel [" + fileName + "] successed. export record: " + exportSum);
 
         exportExcel.finish();
     }
@@ -107,13 +123,15 @@ public class UserCsvServiceImpl implements UserCsvService {
 
         Page pageRecord = userService.queryList(null, new Page(page, pageSize));
         List data = pageRecord.getRecords();
-        afterQueryDo(data);
         if (data.size() != 0) {
-//            getExportList(++page, pageSize);
+            afterQueryDo(data);//afterQueryDo
+            getExportList(++page, pageSize);
         }
     }
 
     private void afterQueryDo(List data) {
+        logger.info("export data. write size: " + data.size());
+        exportSum += data.size();
         exportExcel.write(data);
     }
 

@@ -20,22 +20,13 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
 
     private static final Logger logger = LoggerFactory.getLogger(EasyExcelUtil.class);
 
-    private Integer headLineMun;
-    private ReadCallback readCallback;
+    private Integer headLineMun;//列名在哪一行
 
-    //读了callbackSize条，调一次callback。读完该页，也会调一次callback
-    private int callbackSize;
+    private ReadCallback readCallback;//回调
+
+    private int callbackSize = 1000;//读了callbackSize条，调一次callback。读完该页，也会调一次callback
 
     private Class head;//列中文名 -> 列名
-
-    private List<String> titles;//列名
-    private List<Map> data = new ArrayList();//数据
-
-    public CallbackAnalysisEventListener(Integer headLineMun, ReadCallback readCallback, int callbackSize) {
-        this.headLineMun = headLineMun;
-        this.readCallback = readCallback;
-        this.callbackSize = callbackSize;
-    }
 
     public CallbackAnalysisEventListener(Integer headLineMun, ReadCallback readCallback, int callbackSize, Class head) {
         this.headLineMun = headLineMun;
@@ -44,11 +35,8 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
         this.head = head;
     }
 
-    public CallbackAnalysisEventListener(Integer headLineMun, ReadCallback readCallback) {
-        this.headLineMun = headLineMun;
-        this.readCallback = readCallback;
-        this.callbackSize = 1000;
-    }
+    private List<String> titles;//列名
+    private List<Map> data = new ArrayList();//数据
 
     /**
      * 读完一行
@@ -90,7 +78,7 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
 
         for (Field field : head.getDeclaredFields()) {
             ExcelProperty excelProperty = field.getAnnotation(ExcelProperty.class);
-            if(excelProperty == null){
+            if (excelProperty == null) {
                 continue;
             }
             titleEn.add(field.getName());
