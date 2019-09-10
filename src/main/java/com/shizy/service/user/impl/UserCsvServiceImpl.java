@@ -8,7 +8,7 @@ import com.shizy.service.user.UserCsvService;
 import com.shizy.service.user.UserService;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.excel.EasyExcelUtil;
-import com.shizy.utils.excel.write.ExportExcel;
+import com.shizy.utils.excel.write.ExcelExporter;
 import com.shizy.utils.jdbc.InserBatchUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +96,7 @@ public class UserCsvServiceImpl implements UserCsvService {
     @Autowired
     private HttpServletResponse response;
 
-    ExportExcel exportExcel = null;
+    ExcelExporter exportExcel = null;
     int exportSum = 0;
 
     @Override

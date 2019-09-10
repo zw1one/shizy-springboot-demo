@@ -6,7 +6,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.shizy.entity.user.UserExp;
 import com.shizy.utils.excel.read.ReadCallback;
 import com.shizy.utils.excel.read.ReadExcel;
-import com.shizy.utils.excel.write.ExportExcel;
+import com.shizy.utils.excel.write.ExcelExporter;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
@@ -47,7 +47,7 @@ public class EasyExcelUtil {
      * @param clazz    实体类。可以加上列名的中英文映射的注解
      */
     public static void export(List data, String fileName, HttpServletResponse response, Class clazz) {
-        ExportExcel exportExcel = new ExportExcel();
+        ExcelExporter exportExcel = new ExcelExporter();
         exportExcel.init(fileName, response, clazz);
         exportExcel.write(data);
         exportExcel.finish();//关闭response流
@@ -80,8 +80,8 @@ public class EasyExcelUtil {
      * 获得ExportExcel，可以分批写入
      * 用法见EasyExcelUtil.export();
      */
-    public static ExportExcel getExportExcel() {
-        return new ExportExcel();
+    public static ExcelExporter getExportExcel() {
+        return new ExcelExporter();
     }
 
 }

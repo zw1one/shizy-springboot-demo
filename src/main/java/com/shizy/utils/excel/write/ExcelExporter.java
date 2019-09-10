@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-public class ExportExcel {
+public class ExcelExporter {
 
     ExcelWriter excelWriter = null;
 
