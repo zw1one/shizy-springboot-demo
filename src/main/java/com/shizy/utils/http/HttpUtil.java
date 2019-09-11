@@ -39,9 +39,9 @@ public class HttpUtil {
             StringBuilder uri = new StringBuilder(url);
 
             if (urlParam != null && !urlParam.isEmpty()) {
-                if(!url.contains("?")){
+                if (!url.contains("?")) {
                     uri.append("?");
-                }else{
+                } else {
                     uri.append("&");
                 }
                 for (Map.Entry entry : (Set<Map.Entry>) urlParam.entrySet()) {

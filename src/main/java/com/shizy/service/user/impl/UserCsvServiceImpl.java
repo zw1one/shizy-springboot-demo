@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * <p>
@@ -52,24 +54,28 @@ public class UserCsvServiceImpl implements UserCsvService {
     //默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public JSONObject importData(MultipartFile file, Map<String, Object> params) throws Exception {
+        return doImport(file, params);
+//        return doThreadImport(file, params);
+    }
+
+    /**
+     * 边读取边写入数据库，避免一次内存中保存的查询数据过多内存溢出
+     */
+    private JSONObject doImport(MultipartFile file, Map<String, Object> params) throws Exception {
 
         logger.info("start import excel [" + file.getOriginalFilename() + "].");
-
         final int[] insertSum = {0};
 
         try (InputStream inputStream = file.getInputStream()) {
             UserPo po = new UserPo();
 
-            /**
-             * 边读取边写入数据库，避免一次内存中保存的查询数据过多内存溢出
-             */
             EasyExcelUtil.read(inputStream, (context, data) -> {
                 //读excel的回调函数，触发条件为：读完一页，或者一页读了5000条。
 
-                List inserted = BeanUtil.copyMapParam2EntityList(data, po);
-
                 //批量写入数据库
+                List inserted = BeanUtil.copyMapParam2EntityList(data, po);
                 int[][] insertRst = inserBatchUtil.insertBatch(inserted);
+//                logger.info("inserted database record: " + inserted.size());
 
                 for (int[] batchSum : insertRst) {
                     insertSum[0] += batchSum.length;
@@ -79,8 +85,50 @@ public class UserCsvServiceImpl implements UserCsvService {
         }
 
         logger.info("import excel [" + file.getOriginalFilename() + "] successed. import record: " + insertSum[0]);
-
         return genReturn(insertSum[0], file.getOriginalFilename());
+    }
+
+    /**
+     * 多线程写入数据库。
+     * 若数据库在单线程时已达到瓶颈，多线程操作只会降低效率
+     * 若读取到内存的数据较多，需考虑内存溢出问题
+     */
+    private JSONObject doThreadImport(MultipartFile file, Map<String, Object> params) throws Exception {
+
+        logger.info("start import excel [" + file.getOriginalFilename() + "].");
+
+        final int[] insertSum = {0};
+        ExecutorService executor = Executors.newFixedThreadPool(8);
+
+        try (InputStream inputStream = file.getInputStream()) {
+            UserPo po = new UserPo();
+
+            EasyExcelUtil.read(inputStream, (context, data) -> {
+
+                List inserted = BeanUtil.copyMapParam2EntityList(data, po);
+
+                executor.execute(() -> {
+                    int[][] insertRst = inserBatchUtil.insertBatch(inserted);
+                    logger.info("inserted database record: " + inserted.size());
+
+                    for (int[] batchSum : insertRst) {
+                        insertSum[0] += batchSum.length;
+                    }
+                });
+            }, 5000, UserExp.class);
+        }
+
+        executor.shutdown();
+        //手动等待，不需要结果则可以不等待
+        while (!executor.isTerminated()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return genReturn(0, file.getOriginalFilename());
     }
 
     private JSONObject genReturn(int sum, String fileName) {
@@ -136,10 +184,6 @@ public class UserCsvServiceImpl implements UserCsvService {
     }
 
 }
-
-
-
-
 
 
 
