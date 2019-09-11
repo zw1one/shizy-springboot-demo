@@ -128,7 +128,7 @@ public class UserCsvServiceImpl implements UserCsvService {
             }
         }
 
-        return genReturn(0, file.getOriginalFilename());
+        return genReturn(insertSum[0], file.getOriginalFilename());
     }
 
     private JSONObject genReturn(int sum, String fileName) {
