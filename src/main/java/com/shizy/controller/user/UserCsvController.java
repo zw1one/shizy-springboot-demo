@@ -3,11 +3,13 @@ package com.shizy.controller.user;
 import com.alibaba.fastjson.JSONObject;
 import com.shizy.common.json.JsonResult;
 import com.shizy.service.user.UserCsvService;
+import com.shizy.utils.format.FormatUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,13 +40,24 @@ public class UserCsvController {
                 return JsonResult.fail("file is null");
             }
             synchronized (UserCsvController.class) {
-                JSONObject rtn = userCsvService.importData(file, params);
-                return JsonResult.success(rtn);
+                return importDataPorcess(file, params);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error(e.getCause().getMessage(), e.getCause());
             return JsonResult.fail("import failed!");
         }
+    }
+
+    private JsonResult importDataPorcess(MultipartFile file, Map<String, Object> params) {
+        JSONObject rtn = null;
+        try {
+            rtn = userCsvService.importData(file, params);
+        } catch (Exception e) {
+            if (e.getCause() instanceof DuplicateKeyException) {
+                return JsonResult.fail("DuplicateKeyException: " + FormatUtil.getDuplicateKey(e.getCause().getMessage()));
+            }
+        }
+        return JsonResult.success(rtn);
     }
 
     @ApiIgnore
