@@ -1,4 +1,4 @@
-package com.shizy.controller.test;
+package com.shizy.controller.welcome;
 
 import com.alibaba.fastjson.JSON;
 import com.shizy.service.user.UserService;
