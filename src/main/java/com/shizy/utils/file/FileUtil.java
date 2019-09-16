@@ -169,61 +169,6 @@ public class FileUtil {
 
     /*********************************************************/
 
-
-    /*******************音频文件输出***************************/
-
-    private static InputStream getInputStream(String mediaUrl) {
-        InputStream inputStream;
-        try {
-            URL urlGet = new URL(mediaUrl);
-            HttpURLConnection http = (HttpURLConnection) urlGet.openConnection();
-            http.setRequestMethod("GET"); // 必须是get方式请求
-            http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            http.setDoOutput(true);
-            http.setDoInput(true);
-            System.setProperty("sun.net.client.defaultConnectTimeout", "30000");// 连接超时30秒
-            System.setProperty("sun.net.client.defaultReadTimeout", "30000"); // 读取超时30秒
-            http.connect();
-            // 获取文件转化为byte流
-            inputStream = http.getInputStream();
-            return inputStream;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static void saveVoiceToDisk(String mediaUrl, String picPath) {
-        InputStream inputStream = getInputStream(mediaUrl);
-        byte[] data = new byte[10240];
-        int len = 0;
-        FileOutputStream fileOutputStream = null;
-        try {
-            fileOutputStream = new FileOutputStream(picPath + System.currentTimeMillis() + ".amr");
-            while ((len = inputStream.read(data)) != -1) {
-                fileOutputStream.write(data, 0, len);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            IOUtils.closeQuietly(inputStream);
-            IOUtils.closeQuietly(fileOutputStream);
-        }
-    }
-
-    public static void saveVoiceToDisk(File file, String picPath) throws IOException {
-        InputStream inputStream = new FileInputStream(file);
-        byte[] data = new byte[10240];
-        int len = 0;
-        FileOutputStream fileOutputStream = null;
-        fileOutputStream = new FileOutputStream(picPath + System.currentTimeMillis() + ".amr");
-        while ((len = inputStream.read(data)) != -1) {
-            fileOutputStream.write(data, 0, len);
-        }
-        IOUtils.closeQuietly(inputStream);
-        IOUtils.closeQuietly(fileOutputStream);
-    }
-    /********************************************************/
 }
 
 
