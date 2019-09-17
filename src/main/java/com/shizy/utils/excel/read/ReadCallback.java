@@ -6,5 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ReadCallback {
+
     public void doAfterReadSheel(AnalysisContext context, List<Map> data);
+
 }

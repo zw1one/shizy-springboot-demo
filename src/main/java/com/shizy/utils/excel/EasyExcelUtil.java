@@ -35,6 +35,9 @@ public class EasyExcelUtil {
         new ReadExcel(inputStream, 0, readCallback, callbackSize, head).read();
     }
 
+    public static void read(InputStream inputStream, ReadCallback readCallback, Integer headLineMun) {
+        new ReadExcel(inputStream, headLineMun, readCallback, 5000, null).read();
+    }
     /****************************************/
 
     /**

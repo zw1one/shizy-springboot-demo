@@ -46,10 +46,14 @@ public class CallbackAnalysisEventListener extends AnalysisEventListener {
     public void invoke(Object object, AnalysisContext context) {
         List<String> rowData = (List<String>) object;
         //取title
+        if (context.getCurrentRowNum() < headLineMun) {
+            return;
+        }
         if (context.getCurrentRowNum().equals(headLineMun)) {
             titles = getTitle(rowData, head);
             return;
         }
+
         //set data
         Map rowMap = new HashMap<String, Object>();
         for (int i = 0; i < rowData.size(); i++) {
