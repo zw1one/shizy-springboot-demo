@@ -3,6 +3,8 @@ package com.shizy.controller.welcome;
 import com.alibaba.fastjson.JSON;
 import com.shizy.service.user.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +26,18 @@ public class TestController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "lol", notes = "{\"param-key\":\"param-value\"}")
     @RequestMapping(value = "lol", method = RequestMethod.POST)
+    @ApiOperation(value = "lol")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "param", value = "{\"param-key\":\"param-value\"}"),
+    })
     public String add(@RequestBody Map param) {
+
+        try {
+            userService.queryDetailVo("1");
+        }catch (Exception e){
+            System.out.println();
+        }
 
         return JSON.toJSONString(param);
     }
