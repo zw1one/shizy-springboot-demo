@@ -30,7 +30,7 @@ public class InserBatchUtil {
      */
     public <PO> int[][] insertBatch(List<PO> data, int batchSize) {
 
-        if (data == null) {
+        if (data == null || data.size() == 0) {
             return null;
         }
 
