@@ -82,6 +82,8 @@ public class UserCsvServiceImpl implements UserCsvService {
                 }
             }, 5000, UserExp.class);
 
+        } catch (Exception e) {
+            throw e;
         }
 
         logger.info("import excel [" + file.getOriginalFilename() + "] successed. import record: " + insertSum[0]);
