@@ -133,8 +133,8 @@ public class UserCsvServiceImpl implements UserCsvService {
 
     private JSONObject genReturn(int sum, String fileName) {
         JSONObject rtn = new JSONObject();
-        rtn.put("file name", fileName);
-        rtn.put("insert sum", sum);
+        rtn.put("fileName", fileName);
+        rtn.put("insertSum", sum);
         return rtn;
     }
 
