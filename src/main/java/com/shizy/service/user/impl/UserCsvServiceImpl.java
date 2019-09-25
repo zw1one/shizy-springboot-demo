@@ -9,7 +9,7 @@ import com.shizy.service.user.UserService;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.excel.EasyExcelUtil;
 import com.shizy.utils.excel.write.ExcelExporter;
-import com.shizy.utils.jdbc.InserBatchUtil;
+import com.shizy.utils.jdbc.JdbcBatchUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class UserCsvServiceImpl implements UserCsvService {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private InserBatchUtil inserBatchUtil;
+    private JdbcBatchUtil jdbcBatchUtil;
 
     /***********************************************/
 
@@ -74,7 +74,7 @@ public class UserCsvServiceImpl implements UserCsvService {
 
                 //批量写入数据库
                 List inserted = BeanUtil.copyMapParam2EntityList(data, po);
-                int[][] insertRst = inserBatchUtil.insertBatch(inserted);
+                int[][] insertRst = jdbcBatchUtil.insertBatch(inserted);
 //                logger.info("inserted database record: " + inserted.size());
 
                 for (int[] batchSum : insertRst) {
@@ -110,7 +110,7 @@ public class UserCsvServiceImpl implements UserCsvService {
                 List inserted = BeanUtil.copyMapParam2EntityList(data, po);
 
                 executor.execute(() -> {
-                    int[][] insertRst = inserBatchUtil.insertBatch(inserted);
+                    int[][] insertRst = jdbcBatchUtil.insertBatch(inserted);
                     logger.info("inserted database record: " + inserted.size());
 
                     for (int[] batchSum : insertRst) {
