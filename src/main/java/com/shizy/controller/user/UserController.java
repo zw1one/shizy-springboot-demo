@@ -79,7 +79,7 @@ public class UserController {
 
     @ApiOperation(value = "user query list", notes = "")
     @RequestMapping(value = "/user/list", method = RequestMethod.POST)
-    public JsonResult queryList(@RequestBody UserDto userDto, @ModelAttribute PageDto pageDto) {
+    public JsonResult queryList(@RequestBody(required = false) UserDto userDto, @ModelAttribute PageDto pageDto) {
         try {
             Page pageList = userService.queryList(userDto, pageDto.getPageOrDefalt());
             return JsonResult.success(pageList);
