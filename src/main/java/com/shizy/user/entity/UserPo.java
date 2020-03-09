@@ -1,4 +1,4 @@
-package com.shizy.entity.user;
+package com.shizy.user.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;

@@ -1,14 +1,14 @@
-package com.shizy.controller.user;
+package com.shizy.user.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.common.json.JsonResult;
 import com.shizy.common.json.page.PageDto;
-import com.shizy.controller.user.param.UserCtrParam_entityNoKey;
-import com.shizy.controller.user.param.UserCtrParam_key;
-import com.shizy.entity.user.UserDto;
-import com.shizy.entity.user.UserPo;
-import com.shizy.entity.user.UserVo;
-import com.shizy.service.user.UserService;
+import com.shizy.user.controller.param.UserCtrParam_entityNoKey;
+import com.shizy.user.controller.param.UserCtrParam_key;
+import com.shizy.user.entity.UserDto;
+import com.shizy.user.entity.UserPo;
+import com.shizy.user.entity.UserVo;
+import com.shizy.user.service.UserService;
 import com.shizy.utils.bean.BeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

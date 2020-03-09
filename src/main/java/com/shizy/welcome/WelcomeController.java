@@ -1,4 +1,4 @@
-package com.shizy.controller.welcome;
+package com.shizy.welcome;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

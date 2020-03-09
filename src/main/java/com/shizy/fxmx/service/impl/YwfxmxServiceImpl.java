@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.shizy.fxmx.entity.YwfxmxPo;
 import com.shizy.fxmx.mapper.YwfxmxMapper;
 import com.shizy.fxmx.service.YwfxmxService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -19,6 +20,9 @@ import java.util.Map;
  */
 @Service
 public class YwfxmxServiceImpl extends ServiceImpl<YwfxmxMapper, YwfxmxPo> implements YwfxmxService {
+
+    @Autowired
+    private YwfxmxMapper ywfxmxMapper;
 
     @Override
     public Page queryList(Map param, Page pageOrDefalt) {

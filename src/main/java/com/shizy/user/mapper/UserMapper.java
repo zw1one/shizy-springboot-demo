@@ -1,7 +1,7 @@
-package com.shizy.mapper.user;
+package com.shizy.user.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.shizy.entity.user.UserPo;
+import com.shizy.user.entity.UserPo;
 
 /**
  * <p>

@@ -3,7 +3,7 @@ package com.shizy.utils.excel;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.shizy.entity.user.UserExp;
+import com.shizy.user.entity.UserExp;
 import com.shizy.utils.excel.read.ReadCallback;
 import com.shizy.utils.excel.read.ReadExcel;
 import com.shizy.utils.excel.write.ExcelExporter;

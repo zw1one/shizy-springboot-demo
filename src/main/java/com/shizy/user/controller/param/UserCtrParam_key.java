@@ -1,4 +1,4 @@
-package com.shizy.controller.user.param;
+package com.shizy.user.controller.param;
 
 import lombok.Data;
 

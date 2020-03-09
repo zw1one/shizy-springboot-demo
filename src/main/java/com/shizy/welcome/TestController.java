@@ -1,7 +1,7 @@
-package com.shizy.controller.welcome;
+package com.shizy.welcome;
 
 import com.alibaba.fastjson.JSON;
-import com.shizy.service.user.UserService;
+import com.shizy.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;

@@ -1,7 +1,7 @@
-package com.shizy.controller.user;
+package com.shizy.user.controller;
 
 import com.shizy.common.json.JsonResult;
-import com.shizy.service.user.UserService;
+import com.shizy.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

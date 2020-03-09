@@ -1,6 +1,6 @@
 package com.shizy.config.task;
 
-import com.shizy.service.user.UserService;
+import com.shizy.user.service.UserService;
 import com.shizy.utils.format.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

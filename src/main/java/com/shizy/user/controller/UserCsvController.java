@@ -1,8 +1,8 @@
-package com.shizy.controller.user;
+package com.shizy.user.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shizy.common.json.JsonResult;
-import com.shizy.service.user.UserCsvService;
+import com.shizy.user.service.UserCsvService;
 import com.shizy.utils.format.FormatUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -1,4 +1,4 @@
-package com.shizy.entity.user;
+package com.shizy.user.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

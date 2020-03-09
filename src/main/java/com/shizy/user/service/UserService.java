@@ -1,9 +1,9 @@
-package com.shizy.service.user;
+package com.shizy.user.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.shizy.entity.user.UserDto;
-import com.shizy.entity.user.UserPo;
-import com.shizy.entity.user.UserVo;
+import com.shizy.user.entity.UserDto;
+import com.shizy.user.entity.UserPo;
+import com.shizy.user.entity.UserVo;
 
 import java.util.List;
 

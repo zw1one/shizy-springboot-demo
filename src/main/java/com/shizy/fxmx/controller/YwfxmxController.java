@@ -4,7 +4,7 @@ package com.shizy.fxmx.controller;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.shizy.common.json.JsonResult;
 import com.shizy.common.json.page.PageDto;
-import com.shizy.controller.user.UserController;
+import com.shizy.user.controller.UserController;
 import com.shizy.fxmx.service.YwfxmxService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,10 +25,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/ywfx")
-@Api(tags = "aaa", description = "vvv")
+@Api(tags = "YwfxmxController", description = "业务分析模型管理")
 public class YwfxmxController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(YwfxmxController.class);
 
     @Autowired
     private YwfxmxService ywfxmxService;
