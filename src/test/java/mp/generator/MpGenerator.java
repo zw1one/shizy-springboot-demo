@@ -20,9 +20,10 @@ public class MpGenerator {
 
     public static void main(String[] args) {
 
-//        String[] tablePrefix = new String[]{"ybg_"};
-        String[] tablePrefix = new String[]{};
-        String[] includeTables = new String[]{"user"};//需要生成的表
+        String[] tablePrefix = new String[]{"LY_YY_CB_"};
+//        String[] tablePrefix = new String[]{};
+        String[] includeTables = new String[]{"LY_YY_CB_YWFXMX", "LY_YY_CB_FXMXYBP", "LY_YY_CB_SFB", "LY_YY_CB_FXMXQX", "LY_YY_CB_FXMXYWJD", "LY_YY_CB_FXLJB", "LY_YY_CB_FXMXRDSJ"};//需要生成的表
+
         String[] excludeTables = new String[]{};//排除生成的表
 
         String moduleName = "user";//模块名
@@ -52,8 +53,8 @@ public class MpGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-//        dsc.setDbType(DbType.ORACLE);
-        dsc.setDbType(DbType.MYSQL);
+        dsc.setDbType(DbType.ORACLE);
+//        dsc.setDbType(DbType.MYSQL);
 
         /*dsc.setTypeConvert(new OracleTypeConvert(){//重写转换规则时需保证数据库类型一致
             // 自定义数据库表字段类型转换【可选】
@@ -72,15 +73,15 @@ public class MpGenerator {
             }
         });*/
 
-//        dsc.setDriverName("oracle.jdbc.OracleDriver");
-//        dsc.setUsername("ly_cloud_xg_zhcp");
-//        dsc.setPassword("ly_cloud_xg_zhcp");
-//        dsc.setUrl("jdbc:oracle:thin:@192.168.6.217:1521:orcl");
+        dsc.setDriverName("oracle.jdbc.OracleDriver");
+        dsc.setUsername("ly_cb");
+        dsc.setPassword("ly_cb");
+        dsc.setUrl("jdbc:oracle:thin:@192.168.37.12:1521:orcl");
 
-        dsc.setDriverName("com.mysql.jdbc.Driver");
-        dsc.setUsername("root");
-        dsc.setPassword("123456");
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/test");
+//        dsc.setDriverName("com.mysql.jdbc.Driver");
+//        dsc.setUsername("root");
+//        dsc.setPassword("123456");
+//        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/ly_db_campus");
 
         mpg.setDataSource(dsc);
 
