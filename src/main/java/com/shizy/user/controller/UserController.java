@@ -81,7 +81,7 @@ public class UserController {
     @RequestMapping(value = "/user/list", method = RequestMethod.POST)
     public JsonResult queryList(@RequestBody(required = false) UserDto userDto, @ModelAttribute PageDto pageDto) {
         try {
-            Page pageList = userService.queryList(userDto, pageDto.getPageOrDefalt());
+            Page pageList = userService.queryList(userDto, PageDto.getPageInstance(pageDto));
             return JsonResult.success(pageList);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
