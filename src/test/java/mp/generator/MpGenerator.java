@@ -22,7 +22,7 @@ public class MpGenerator {
 
         String[] tablePrefix = new String[]{"LY_YY_CB_"};
 //        String[] tablePrefix = new String[]{};
-        String[] includeTables = new String[]{"LY_YY_CB_YWFXMX", "LY_YY_CB_FXMXYBP", "LY_YY_CB_SFB", "LY_YY_CB_FXMXQX", "LY_YY_CB_FXMXYWJD", "LY_YY_CB_FXLJB", "LY_YY_CB_FXMXRDSJ"};//需要生成的表
+        String[] includeTables = new String[]{"LY_YY_CB_STU_BOX_XXCJ", "LY_YY_CB_STU_BOX_XXJY", "LY_YY_CB_STU_BOX_XXXF", "LY_YY_CB_STU_BOX_XYCJ", "LY_YY_CB_STU_BOX_XYJY", "LY_YY_CB_STU_BOX_XYXF", "LY_YY_CB_STU_BOX_ZYCJ", "LY_YY_CB_STU_BOX_ZYJY", "LY_YY_CB_STU_BOX_ZYXF"};//需要生成的表
 
         String[] excludeTables = new String[]{};//排除生成的表
 
