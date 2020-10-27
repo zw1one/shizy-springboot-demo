@@ -70,47 +70,40 @@ public class BeanUtil {
         return list;
     }
 
-    public static <S, T> T copyProperties(S source, T target, String[] ignoreFields) {
-
+    public static <S, T> T copyProperties(S source, T target, String... ignoreFields) {
         if (source == null || target == null) {
             return target;
         }
-
         Class<?> aClass = target.getClass();
         //迭代set
         for (Method method : aClass.getMethods()) {
             if (method.getName().indexOf("set") != 0) {
                 continue;
             }
-
             String field = method.getName().substring(3, 4).toLowerCase() +
                     method.getName().substring(4);
-
             if (isIgnoredField(ignoreFields, field)) {
                 continue;
             }
-
             Object sourceFieldValue = null;
             try {
                 Method crtMethod = source.getClass()
                         .getMethod("get" + field.substring(0, 1).toUpperCase() + field.substring(1));
                 crtMethod.setAccessible(true);
-
                 sourceFieldValue = crtMethod.invoke(source);
-
                 if (sourceFieldValue == null) {
                     continue;
                 }
-
                 if (!method.getParameterTypes()[0].isAssignableFrom(sourceFieldValue.getClass())) {
                     continue;
                 }
-
                 method.invoke(target, sourceFieldValue);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
+                logger.error("反射调用ParamUtil.copyProperties方法失败[source={}],[target={}]", source, target);
+                throw new RuntimeException(e);
             } catch (NoSuchMethodException e) {
-//                e.printStackTrace();
+                //do nothing
+//                e.printStackTrace();//
             }
         }
         return target;
@@ -124,7 +117,7 @@ public class BeanUtil {
      * @return target 被填充内容的target 可以不处理这个返回，参数中的引用类型target，其值已经被改变
      */
     public static <S, T> T copyProperties(S source, T target) {
-        return copyProperties(source, target, null);
+        return copyProperties(source, target, (String[]) null);
     }
 
     private static boolean isIgnoredField(String[] ignoreFields, String field) {
