@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
 
-        userVo = BeanUtil.copyParam2Entity(userPo, new UserVo());
+        userVo = BeanUtil.copyProperties(userPo, new UserVo());
         cacheUtil.putHash(cacheKey, id, userVo);
         return userVo;
     }
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
         List<UserPo> listPo = userMapper.selectPage(page, wrapper);
 
-        List<UserVo> listVo = BeanUtil.copyParam2EntityList(listPo, new UserVo());
+        List<UserVo> listVo = BeanUtil.copyPropertiesList(listPo, UserVo.class);
         page.setRecords(listPo);
 
         return page;
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
         int result = userMapper.insert(po);
         if (result > 0) {
-            cacheUtil.putHash(cacheKey, po.getUserId(), BeanUtil.copyParam2Entity(po, new UserVo()));
+            cacheUtil.putHash(cacheKey, po.getUserId(), BeanUtil.copyProperties(po, new UserVo()));
             return id;
         }
         return null;
@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService {
         int result = userMapper.updateById(po);
 
         if (result > 0) {
-            cacheUtil.putHash(cacheKey, po.getUserId(), BeanUtil.copyParam2Entity(po, new UserVo()));
+            cacheUtil.putHash(cacheKey, po.getUserId(), BeanUtil.copyProperties(po, new UserVo()));
             return true;
         }
         return false;

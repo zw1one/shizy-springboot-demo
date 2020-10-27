@@ -47,7 +47,7 @@ public class JsonResult implements Serializable {
             Page pageObj = (Page) data;
             PageInfo pageInfo = new PageInfo();
 
-            pageInfo = BeanUtil.copyParam2Entity(pageObj, new PageInfo());
+            pageInfo = BeanUtil.copyProperties(pageObj, new PageInfo());
             pageInfo.setPage(pageObj.getCurrent());
             pageInfo.setPageSize(pageObj.getSize());
 

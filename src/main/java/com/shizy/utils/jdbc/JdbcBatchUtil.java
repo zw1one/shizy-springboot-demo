@@ -36,7 +36,7 @@ public class JdbcBatchUtil {
 
         Class poClass = data.get(0).getClass();
 
-        List<Field> fields = getFields(poClass);
+        List<Field> fields = BeanUtil.getFields(poClass);
         String sql = getInsertSql(poClass, fields);
 
         int[][] updateCounts = jdbcTemplate.batchUpdate(
@@ -104,18 +104,6 @@ public class JdbcBatchUtil {
         return rtnStr;
     }
 
-    private List getFields(Class poClass) {
-        List<Field> fieldNames = new ArrayList();
-        for (Field field : poClass.getDeclaredFields()) {
-            field.setAccessible(true);
-            if (field.getAnnotation(TableId.class) == null && field.getAnnotation(TableField.class) == null) {
-                continue;
-            }
-            fieldNames.add(field);
-        }
-        return fieldNames;
-    }
-
     /************************************************************/
 
     public <PO> int[][] deleteBatch(List<PO> data) {
@@ -138,7 +126,7 @@ public class JdbcBatchUtil {
 
         Class poClass = data.get(0).getClass();
 
-        List<Field> fields = getFields(poClass);
+        List<Field> fields = BeanUtil.getFields(poClass);
         String sql = getDeleteSql(poClass, fields, data.get(0));
 
         int[][] updateCounts = jdbcTemplate.batchUpdate(

@@ -31,7 +31,7 @@ public class UserController {
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     public JsonResult add(@RequestBody UserCtrParam_entityNoKey param) {
         try {
-            UserPo po = BeanUtil.copyParam2Entity(param, new UserPo());
+            UserPo po = BeanUtil.copyProperties(param, new UserPo());
             String result = userService.add(po);
             return JsonResult.success(result);
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class UserController {
     @RequestMapping(value = "/user/update", method = RequestMethod.POST)
     public JsonResult add(@RequestBody UserPo param) {
         try {
-            UserPo po = BeanUtil.copyParam2Entity(param, new UserPo());
+            UserPo po = BeanUtil.copyProperties(param, new UserPo());
             boolean result = userService.updateById(po);
             return JsonResult.success(result);
         } catch (Exception e) {

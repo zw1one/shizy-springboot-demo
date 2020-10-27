@@ -1,10 +1,15 @@
 package com.shizy.utils.bean;
 
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -14,6 +19,7 @@ import java.util.Map;
 
 public class BeanUtil {
 
+    private static final Logger logger = LoggerFactory.getLogger(BeanUtil.class);
 
     /***********************************************************/
 
@@ -64,7 +70,7 @@ public class BeanUtil {
         return list;
     }
 
-    public static <S, T> T copyParam2Entity(S source, T target, String[] ignoreFields) {
+    public static <S, T> T copyProperties(S source, T target, String[] ignoreFields) {
 
         if (source == null || target == null) {
             return target;
@@ -117,8 +123,8 @@ public class BeanUtil {
      * @param target 被填充内容的entity
      * @return target 被填充内容的target 可以不处理这个返回，参数中的引用类型target，其值已经被改变
      */
-    public static <S, T> T copyParam2Entity(S source, T target) {
-        return copyParam2Entity(source, target, null);
+    public static <S, T> T copyProperties(S source, T target) {
+        return copyProperties(source, target, null);
     }
 
     private static boolean isIgnoredField(String[] ignoreFields, String field) {
@@ -138,19 +144,18 @@ public class BeanUtil {
     /**
      * 复制泛型S的List数据到泛型T的List中，以target中成员属性是否存在为准
      *
-     * @param sourceList    泛型S的List
-     * @param targetGeneric 用于确定结果List的泛型T
-     * @param ignoreField   从target中忽略填值的字段
+     * @param sourceList  泛型S的List
+     * @param targetClass 用于确定结果List的泛型T
      * @return 泛型T的结果List
      */
-    public static <S, T> List<T> copyParam2EntityList(List<S> sourceList, T targetGeneric, String... ignoreField) {
-        Class targetClass = targetGeneric.getClass();
+    public static <S, T> List<T> copyPropertiesList(List<S> sourceList, Class<T> targetClass) {
         List<T> targetList = new ArrayList<>();
-        for (S s : sourceList) {
+        for (S source : sourceList) {
             try {
-                targetList.add(copyParam2Entity(s, (T) targetClass.newInstance(), ignoreField));
+                targetList.add(copyProperties(source, (T) targetClass.newInstance()));
             } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
+                logger.error("反射调用newInstance方法失败[class={}],[field={}]", targetClass);
+                throw new RuntimeException(e);
             }
         }
         return targetList;
@@ -187,24 +192,54 @@ public class BeanUtil {
         return genMapFromEntity(entity, new HashMap<>());
     }
 
+    /**
+     * 通过TableId/TableField，识别PO类的字段
+     *
+     * @param poClass
+     * @return PO类的字段
+     */
+    public static List getFields(Class poClass) {
+        List<Field> fieldNames = new ArrayList();
+        for (Field field : poClass.getDeclaredFields()) {
+            field.setAccessible(true);
+            if (field.getAnnotation(TableId.class) == null && field.getAnnotation(TableField.class) == null) {
+                continue;
+            }
+            if (field.getAnnotation(TableField.class) != null && !field.getAnnotation(TableField.class).exist()) {
+                continue;
+            }
+            fieldNames.add(field);
+        }
+        return fieldNames;
+    }
 
     /***********************************************************/
 
+    /**
+     * 反射调用实例的get方法
+     *
+     * @param obj        被调用的实例对象
+     * @param field      字段名
+     * @param fieldClass 字段类型
+     * @return get方法返回的数据
+     */
     public static <S, T> T get(S obj, String field, Class<T> fieldClass) {
-
         try {
             return (T) obj.getClass().getMethod(
                     "get" + field.substring(0, 1).toUpperCase() + field.substring(1)
             ).invoke(obj);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            logger.error("反射调用get方法失败[obj={}],[field={}]", obj, field);
+            throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
-    public static <S, V> S set(S obj, String field, V value, Class fieldClass) {
+    /**
+     * 反射调用set
+     */
+    public static <S, V> void set(S obj, String field, V value, Class fieldClass) {
         Method m = null;
         //get Method
         try {
@@ -213,18 +248,15 @@ public class BeanUtil {
                     fieldClass
             );
         } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
+            return;
         }
         //invoke
         try {
-            if (m != null) {
-                m.invoke(obj, value);
-            }
+            m.invoke(obj, value);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+            logger.error("反射调用set方法失败[obj={}],[field={}]", obj, field);
+            throw new RuntimeException(e);
         }
-
-        return obj;
     }
 
     @Test
@@ -258,7 +290,7 @@ public class BeanUtil {
         Assassin source = new Assassin("zed", "Lord of Shadows", 80, "hehehe");
         Archer target = new Archer();
 
-        BeanUtil.copyParam2Entity(source, target);
+        BeanUtil.copyProperties(source, target);
 
         System.out.println();
     }

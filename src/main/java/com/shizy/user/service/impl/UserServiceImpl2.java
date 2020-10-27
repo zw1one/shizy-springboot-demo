@@ -50,7 +50,7 @@ public class UserServiceImpl2 implements UserService {
         if (userPo == null) {
             return null;
         }
-        return BeanUtil.copyParam2Entity(userPo, new UserVo());
+        return BeanUtil.copyProperties(userPo, new UserVo());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class UserServiceImpl2 implements UserService {
 
         List<UserPo> listPo = userMapper.selectPage(page, wrapper);
 
-        List<UserVo> listVo = BeanUtil.copyParam2EntityList(listPo, new UserVo());
+        List<UserVo> listVo = BeanUtil.copyPropertiesList(listPo, UserVo.class);
         page.setRecords(listPo);
 
         return page;
