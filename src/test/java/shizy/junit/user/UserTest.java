@@ -22,7 +22,7 @@ public class UserTest {
         delete(id);
     }
 
-    @Test
+//    @Test
     public void zz() {
 
         for (int i = 0; i < 100000; i++) {

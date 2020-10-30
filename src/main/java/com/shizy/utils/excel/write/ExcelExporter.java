@@ -8,6 +8,7 @@ import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
 public class ExcelExporter {
@@ -21,7 +22,7 @@ public class ExcelExporter {
     public void init(String fileName, HttpServletResponse response, Class clazz) {
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
-        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+        response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName));
 
         try {
             outputStream = response.getOutputStream();

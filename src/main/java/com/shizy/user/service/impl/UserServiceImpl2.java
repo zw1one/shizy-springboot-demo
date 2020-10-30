@@ -2,15 +2,15 @@ package com.shizy.user.service.impl;
 
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.toolkit.IdWorker;
 import com.shizy.user.entity.UserDto;
 import com.shizy.user.entity.UserPo;
 import com.shizy.user.entity.UserVo;
 import com.shizy.user.mapper.UserMapper;
 import com.shizy.user.service.UserService;
-import com.shizy.utils.auth.IdUtil;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.query.QueryUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -77,7 +77,7 @@ public class UserServiceImpl2 implements UserService {
 
     @Override
     public String add(UserPo po) {
-        String id = IdUtil.genUUID();
+        String id = IdWorker.get32UUID();
         po.setUserId(id);
 
         int result = userMapper.insert(po);

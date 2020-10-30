@@ -191,7 +191,7 @@ public class BeanUtil {
      * @param poClass
      * @return PO类的字段
      */
-    public static List getFields(Class poClass) {
+    public static List<Field> getFields(Class poClass) {
         List<Field> fieldNames = new ArrayList();
         for (Field field : poClass.getDeclaredFields()) {
             field.setAccessible(true);

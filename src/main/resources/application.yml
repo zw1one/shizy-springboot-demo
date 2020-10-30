@@ -21,14 +21,17 @@ spring.freemarker:
 
 spring.servlet:
   multipart:
-    max-file-size: 50Mb
-    max-request-size: 100Mb
+    max-file-size: 50MB
+    max-request-size: 100MB
 
-spring.http:
-  encoding:
-    charset: UTF-8
-    force: true
+#spring.http:
+#  encoding:
+#    charset: UTF-8
+#    force: true
 
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
 
 ###########################################
-

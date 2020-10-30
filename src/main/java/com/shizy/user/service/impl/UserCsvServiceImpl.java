@@ -52,7 +52,7 @@ public class UserCsvServiceImpl implements UserCsvService {
 
     @Override
     //默认仅抛出RuntimeException回滚，这里指定抛出任意Exception都回滚
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public JSONObject importData(MultipartFile file, Map<String, Object> params) throws Exception {
         return doImport(file, params);
 //        return doThreadImport(file, params);
@@ -116,6 +116,7 @@ public class UserCsvServiceImpl implements UserCsvService {
                     for (int[] batchSum : insertRst) {
                         insertSum[0] += batchSum.length;
                     }
+
                 });
             }, 5000, UserExp.class);
         }
@@ -152,7 +153,8 @@ public class UserCsvServiceImpl implements UserCsvService {
     @Override
     public void exportData(Map<String, Object> params) {
 
-        String fileName = "user_data.xlsx";
+//        String fileName = "user_data.xlsx";
+        String fileName = "啊啊.xlsx";
 
         exportExcel = EasyExcelUtil.getExportExcel();
         exportExcel.init(fileName, response, UserExp.class);
