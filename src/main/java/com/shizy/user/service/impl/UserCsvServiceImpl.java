@@ -73,7 +73,7 @@ public class UserCsvServiceImpl implements UserCsvService {
                 //读excel的回调函数，触发条件为：读完一页，或者一页读了5000条。
 
                 //批量写入数据库
-                List inserted = BeanUtil.copyMapParam2EntityList(data, po);
+                List inserted = BeanUtil.copyMapParam2EntityList(data, UserPo.class);
                 int[][] insertRst = jdbcBatchUtil.insertBatch(inserted);
 //                logger.info("inserted database record: " + inserted.size());
 
@@ -107,7 +107,7 @@ public class UserCsvServiceImpl implements UserCsvService {
 
             EasyExcelUtil.read(inputStream, (context, data) -> {
 
-                List inserted = BeanUtil.copyMapParam2EntityList(data, po);
+                List inserted = BeanUtil.copyMapParam2EntityList(data, UserPo.class);
 
                 executor.execute(() -> {
                     int[][] insertRst = jdbcBatchUtil.insertBatch(inserted);

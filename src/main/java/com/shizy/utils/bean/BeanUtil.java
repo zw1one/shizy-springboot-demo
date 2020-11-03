@@ -33,13 +33,11 @@ public class BeanUtil {
      * @return entity 被填充内容的Entity 可以不处理这个返回，参数中的引用类型entity，其值已经被改变
      */
     public static <T> T copyMapParam2Entity(Map paramMap, T entity) {
-
         if (paramMap == null) {
             return entity;
         }
-
         Class<?> aClass = entity.getClass();
-        //迭代set
+        //迭代set方法
         for (Method method : aClass.getMethods()) {
             if (method.getName().indexOf("set") != 0) {
                 continue;
@@ -49,22 +47,21 @@ public class BeanUtil {
             try {
                 method.invoke(entity, paramMap.get(field));
             } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
+                logger.error("反射调用copyMapParam2Entity方法失败[paramMap={}],[entity={}]", paramMap, entity);
+                throw new RuntimeException(e);
             }
         }
-
         return entity;
     }
 
-    public static <T> List<T> copyMapParam2EntityList(List<Map> paramList, T entity) {
+    public static <T> List<T> copyMapParam2EntityList(List<Map> paramList, Class<T> entityClass) {
         List<T> list = new ArrayList<>();
         for (Map map : paramList) {
             try {
-                list.add(copyMapParam2Entity(map, (T) entity.getClass().newInstance()));
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                list.add(copyMapParam2Entity(map, entityClass.newInstance()));
+            } catch (InstantiationException | IllegalAccessException e) {
+                logger.error("反射调用copyMapParam2EntityList方法失败[List={}],[entityClass={}]", paramList, entityClass);
+                throw new RuntimeException(e);
             }
         }
         return list;
@@ -99,7 +96,7 @@ public class BeanUtil {
                 }
                 method.invoke(target, sourceFieldValue);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                logger.error("反射调用ParamUtil.copyProperties方法失败[source={}],[target={}]", source, target);
+                logger.error("反射调用copyProperties方法失败[source={}],[target={}]", source, target);
                 throw new RuntimeException(e);
             } catch (NoSuchMethodException e) {
                 //do nothing
