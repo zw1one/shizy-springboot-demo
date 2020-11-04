@@ -139,6 +139,9 @@ public class BeanUtil {
      * @return 泛型T的结果List
      */
     public static <S, T> List<T> copyPropertiesList(List<S> sourceList, Class<T> targetClass) {
+        if(sourceList == null){
+            return null;
+        }
         List<T> targetList = new ArrayList<>();
         for (S source : sourceList) {
             try {
@@ -153,10 +156,9 @@ public class BeanUtil {
 
     /***********************************************************/
 
-    public static <T> Map<? extends String, ?> genMapFromEntity(T entity, Map<String, Object> existMap) {
-
+    public static <T> Map<String, Object> genMapFromEntity(T entity, Map<String, Object> existMap) {
         Class<?> aClass = entity.getClass();
-        //迭代get
+        //迭代get方法
         for (Method method : aClass.getMethods()) {
             if (method.getName().indexOf("get") != 0 || method.getName().indexOf("getClass") == 0) {
                 //若不为get或为getClass
@@ -166,20 +168,24 @@ public class BeanUtil {
                     method.getName().substring(4);
             try {
                 existMap.put(field, method.invoke(entity));
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                logger.error("反射调用genMapFromEntity方法失败[entity={}]", entity);
+                throw new RuntimeException(e);
             }
-
         }
-
         return existMap;
     }
 
-    /**
-     * entity to map
-     */
-    public static <T> Map<? extends String, ?> genMapFromEntity(T entity) {
+    public static <T> Map<String, Object> genMapFromEntity(T entity) {
         return genMapFromEntity(entity, new HashMap<>());
+    }
+
+    public static <T> List<Map<String, Object>> genMapFromEntityList(List<T> entityList) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (T entity : entityList) {
+            result.add(genMapFromEntity(entity));
+        }
+        return result;
     }
 
     /**
