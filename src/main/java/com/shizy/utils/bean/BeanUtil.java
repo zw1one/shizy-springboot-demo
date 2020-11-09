@@ -117,6 +117,15 @@ public class BeanUtil {
         return copyProperties(source, target, (String[]) null);
     }
 
+    public static <S, T> T copyProperties(S source, Class<T> targetClass) {
+        try {
+            return copyProperties(source, targetClass.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.error("反射调用newInstance方法失败[class={}],[field={}]", targetClass);
+            throw new RuntimeException(e);
+        }
+    }
+
     private static boolean isIgnoredField(String[] ignoreFields, String field) {
 
         if (ignoreFields == null) {
