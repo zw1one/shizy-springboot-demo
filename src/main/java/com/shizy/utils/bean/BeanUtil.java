@@ -2,20 +2,16 @@ package com.shizy.utils.bean;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BeanUtil {
 
@@ -66,6 +62,8 @@ public class BeanUtil {
         }
         return list;
     }
+
+    /***********************************************************/
 
     public static <S, T> T copyProperties(S source, T target, String... ignoreFields) {
         if (source == null || target == null) {
@@ -148,7 +146,7 @@ public class BeanUtil {
      * @return 泛型T的结果List
      */
     public static <S, T> List<T> copyPropertiesList(List<S> sourceList, Class<T> targetClass) {
-        if(sourceList == null){
+        if (sourceList == null) {
             return null;
         }
         List<T> targetList = new ArrayList<>();
@@ -161,6 +159,30 @@ public class BeanUtil {
             }
         }
         return targetList;
+    }
+
+    /**
+     * 获取值为空的字段
+     */
+    public static String[] getNullPropertyNames (Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+        Set<String> emptyNames = new HashSet<String>();
+        for(java.beans.PropertyDescriptor pd : pds) {
+            Object srcValue = src.getPropertyValue(pd.getName());
+            if (srcValue == null) emptyNames.add(pd.getName());
+        }
+        String[] result = new String[emptyNames.size()];
+        return emptyNames.toArray(result);
+    }
+
+    /**
+     * 将src不为空的值，覆盖到target
+     * 这里是使用的BeanUtils方法实现忽略null。结果同copyProperties
+     */
+    public static void copyPropertiesIgnoreNull(Object src, Object target){
+        BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
     }
 
     /***********************************************************/
@@ -264,62 +286,9 @@ public class BeanUtil {
         }
     }
 
-    @Test
-    public void getSetTest() throws Exception {
-        Archer entity = new Archer();
-
-        BeanUtil.set(entity, "attack", 111, int.class);
-        int z = BeanUtil.get(entity, "attack", int.class);
-
-        System.out.println();
-    }
-
-    /***********************************************************/
-
-    @Test
-    public void copyMapParam2EntityTest() throws Exception {
-        Map paramMap = new HashMap();
-        paramMap.put("name", "ashe");
-        paramMap.put("title", "ice archer");
-        paramMap.put("attack", 67);
-
-        Archer entity = new Archer();
-
-        BeanUtil.copyMapParam2Entity(paramMap, entity);
-
-        System.out.println();
-    }
-
-    @Test
-    public void copyParam2EntityTest() throws Exception {
-        Assassin source = new Assassin("zed", "Lord of Shadows", 80, "hehehe");
-        Archer target = new Archer();
-
-        BeanUtil.copyProperties(source, target);
-
-        System.out.println();
-    }
 
 }
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class Archer {
-    private String name;
-    private String title;
-    private int attack;
-}
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class Assassin {
-    private String name;
-    private String title;
-    private int attack;
-    private String finalSkill;
-}
 
 
 
