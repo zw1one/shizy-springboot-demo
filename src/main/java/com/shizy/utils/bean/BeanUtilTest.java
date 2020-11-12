@@ -50,7 +50,6 @@ public class BeanUtilTest {
     }
 
 }
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -69,3 +68,4 @@ class Assassin {
     private int attack;
     private String finalSkill;
 }
+

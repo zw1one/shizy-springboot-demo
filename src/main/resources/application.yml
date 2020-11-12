@@ -9,6 +9,7 @@ spring.profiles:
 spring.application:
   name: web-base
 
+#springboot2.3.0之前的写法
 #spring.resources:
 #  static-locations: classpath:/webapps/static/
 #spring.mvc:
@@ -24,6 +25,7 @@ spring.servlet:
     max-file-size: 50MB
     max-request-size: 100MB
 
+#springboot2.3.0之前的写法
 #spring.http:
 #  encoding:
 #    charset: UTF-8

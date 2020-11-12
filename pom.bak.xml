@@ -29,6 +29,13 @@
             <name>aliyun maven</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
+
+        <repository>
+            <id>public</id>
+            <name>public</name>
+            <url>http://192.168.30.58:8081/repository/public/</url>
+        </repository>
+
     </repositories>
 
     <pluginRepositories>
@@ -45,15 +52,36 @@
 
         <!--########## framwork ##########-->
 
+        <!-- swagger2 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+
         <!--springboot-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--<exclusions>
+                <exclusion>
+                    &lt;!&ndash;排除自带日志，使用自定义日志&ndash;&gt;
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>-->
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+<!--            <scope>test</scope>-->
         </dependency>
 
         <dependency>
@@ -67,6 +95,11 @@
             <version>2.7.0</version>
         </dependency>
 
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>-->
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -78,21 +111,27 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.11</version>
         </dependency>
+
+        <!--<dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>-->
+
+        <!--自定义日志 (需排除springboot自带日志)-->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>-->
+
         <!--springboot end-->
 
-        <!-- swagger2 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-
         <!-- database -->
+
         <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
@@ -101,23 +140,51 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- oracle 公司的库-->
+       <!-- <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3</version>
+        </dependency>
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.10</version>
-        </dependency>
+        </dependency>-->
 
         <!-- redis -->
-        <dependency>
+        <!--<dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>3.3.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+        <!-- mongodb -->
+        <!--<dependency>-->
+            <!--<groupId>org.mongodb</groupId>-->
+            <!--<artifactId>mongodb-driver-sync</artifactId>-->
+            <!--<version>3.9.1</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.data</groupId>-->
+            <!--<artifactId>spring-data-mongodb</artifactId>-->
+            <!--<version>2.0.2.RELEASE</version>-->
+        <!--</dependency>-->
+
         <!-- database end  -->
+
+        <!--junit-->
+        <!--<dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            &lt;!&ndash;<scope>test</scope>&ndash;&gt;
+        </dependency>-->
 
         <!-- lombok -->
         <dependency>
@@ -150,9 +217,11 @@
             <artifactId>httpmime</artifactId>
             <version>4.5.5</version>
         </dependency>
+
         <!--########## framwork end ##########-->
 
         <!--########## utils ##########-->
+
         <!--easyexcel（包括poi包）-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -166,9 +235,11 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.73</version>
         </dependency>
+
         <!--########## utils end ##########-->
 
     </dependencies>
+
 
     <!--================================plugins=================================-->
 

@@ -22,8 +22,7 @@ spring.datasource.dynamic:
   datasource:
     master:
       driver-class-name: com.mysql.jdbc.Driver
-#      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false&zeroDateTimeBehavior=convertToNull
-      url: jdbc:mysql://192.168.255.131:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false&zeroDateTimeBehavior=convertToNull
+      url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8&useSSL=false&zeroDateTimeBehavior=convertToNull
       username: root
       password: 123456
 #    slave1: # 多数据源test
@@ -36,7 +35,7 @@ spring.datasource.dynamic:
 spring.datasource.druid: # druid minitor
   stat-view-servlet: # http://localhost:80/druid
     login-username: admin
-    login-password: admin123456!@#
+    login-password: admin
 
 spring.datasource.druid.dynamic.datasource: # 连接池配置
   master: # 这个master对应上面的master数据源
