@@ -1,6 +1,6 @@
 package com.shizy.user.controller;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shizy.common.json.JsonResult;
 import com.shizy.common.json.page.PageDto;
 import com.shizy.user.controller.param.UserCtrParam_entityNoKey;

@@ -1,15 +1,13 @@
 package com.shizy.user.service.impl;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.toolkit.IdWorker;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shizy.user.entity.UserDto;
 import com.shizy.user.entity.UserPo;
 import com.shizy.user.entity.UserVo;
 import com.shizy.user.mapper.UserMapper;
 import com.shizy.user.service.UserService;
 import com.shizy.utils.bean.BeanUtil;
-import com.shizy.utils.query.QueryUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,22 +53,7 @@ public class UserServiceImpl2 implements UserService {
 
     @Override
     public Page queryList(UserDto dto, Page page) {
-        Wrapper wrapper = QueryUtil.getEntityCondition(dto, new UserPo());
-
-        if (dto.getNameAndAccount() != null && wrapper != null) {
-            String param = dto.getNameAndAccount();
-            wrapper.andNew()
-                    .like("user_account", param)
-                    .or()
-                    .like("user_name", param);
-        }
-
-        List<UserPo> listPo = userMapper.selectPage(page, wrapper);
-
-        List<UserVo> listVo = BeanUtil.copyPropertiesList(listPo, UserVo.class);
-        page.setRecords(listPo);
-
-        return page;
+        return null;
     }
 
     /***********************************************/

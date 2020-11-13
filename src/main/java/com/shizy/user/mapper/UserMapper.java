@@ -1,6 +1,6 @@
 package com.shizy.user.mapper;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shizy.user.entity.UserPo;
 
 /**

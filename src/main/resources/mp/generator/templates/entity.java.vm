@@ -1,4 +1,4 @@
-package ${package.Entity}import com.baomidou.mybatisplus.annotations.Version;
+package ${package.Entity}import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

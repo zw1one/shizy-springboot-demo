@@ -35,7 +35,7 @@ public class TestController {
 
         try {
             userService.queryDetailVo("1");
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println();
         }
 

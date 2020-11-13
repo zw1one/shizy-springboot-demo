@@ -1,9 +1,10 @@
 package com.shizy.utils.query;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +14,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * todo 更新了mybatis-plus版本，该工具类暂未适配 可能弃用
+ *
+ * @param <PO>
+ * @param <DTO>
+ */
+@Deprecated
 public class QueryUtil<PO, DTO> {
 
     /**
@@ -22,7 +31,7 @@ public class QueryUtil<PO, DTO> {
      * @param dto 传入参数 dto中需要标明注解
      * @param po  指定Wrapper的entity
      */
-    public static <PO, DTO> Wrapper<PO> getEntityCondition(DTO dto, PO po) {
+    public static <PO, DTO> QueryWrapper<PO> getEntityCondition(DTO dto, PO po) {
         try {
             return getEntityCondition0(dto, po);
         } catch (InvocationTargetException | IllegalAccessException | NoSuchFieldException e) {
@@ -31,13 +40,13 @@ public class QueryUtil<PO, DTO> {
         return null;
     }
 
-    private static <PO, DTO> Wrapper<PO> getEntityCondition0(DTO dto, PO po) throws InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+    private static <PO, DTO> QueryWrapper<PO> getEntityCondition0(DTO dto, PO po) throws InvocationTargetException, IllegalAccessException, NoSuchFieldException {
 
         if (dto == null) {
             return null;
         }
 
-        Wrapper<PO> entityWrapper = new EntityWrapper<PO>(po);
+        QueryWrapper<PO> entityWrapper = Wrappers.emptyWrapper();
 
         Map betweensMap = new HashMap();
 
@@ -52,10 +61,8 @@ public class QueryUtil<PO, DTO> {
                 continue;
             }
             //从dto的get方法中得到成员变量field字符串
-            String field = new StringBuffer()
-                    .append(m.getName().substring(3, 4).toLowerCase())
-                    .append(m.getName().substring(4))
-                    .toString();
+            String field = m.getName().substring(3, 4).toLowerCase() +
+                    m.getName().substring(4);
 
             //读取dto上的QueryParam注解
             Field dtoFieldObj = dto.getClass().getDeclaredField(field);
@@ -100,7 +107,7 @@ public class QueryUtil<PO, DTO> {
         return entityWrapper;
     }
 
-    private static void orderByPrimaryKey(Wrapper wrapper) {
+    private static void orderByPrimaryKey(QueryWrapper wrapper) {
         List keyList = new ArrayList();
 
         Field[] fields = wrapper.getEntity().getClass().getDeclaredFields();
@@ -110,7 +117,7 @@ public class QueryUtil<PO, DTO> {
                 keyList.add(tableId.value());
             }
         }
-        wrapper.orderAsc(keyList);
+        wrapper.orderByAsc(keyList);
     }
 
     //根据field从po得到数据库列名

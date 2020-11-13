@@ -1,6 +1,6 @@
 package com.shizy.user.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shizy.user.entity.UserDto;
 import com.shizy.user.entity.UserPo;
 import com.shizy.user.entity.UserVo;

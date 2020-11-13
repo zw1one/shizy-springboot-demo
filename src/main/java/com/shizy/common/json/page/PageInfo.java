@@ -12,12 +12,12 @@ public class PageInfo {
     /**
      * 当前页
      */
-    private Integer page;
+    private Long page;
 
     /**
      * 每页的data条数
      */
-    private Integer pageSize;
+    private Long pageSize;
 
     /**
      * data总条数

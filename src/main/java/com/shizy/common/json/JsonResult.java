@@ -1,6 +1,6 @@
 package com.shizy.common.json;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.shizy.common.json.page.PageInfo;
 import com.shizy.utils.bean.BeanUtil;

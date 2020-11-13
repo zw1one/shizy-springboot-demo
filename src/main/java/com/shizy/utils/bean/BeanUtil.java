@@ -1,7 +1,7 @@
 package com.shizy.utils.bean;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -152,7 +152,7 @@ public class BeanUtil {
         List<T> targetList = new ArrayList<>();
         for (S source : sourceList) {
             try {
-                targetList.add(copyProperties(source, (T) targetClass.newInstance()));
+                targetList.add(copyProperties(source, targetClass.newInstance()));
             } catch (InstantiationException | IllegalAccessException e) {
                 logger.error("反射调用newInstance方法失败[class={}],[field={}]", targetClass);
                 throw new RuntimeException(e);
@@ -164,12 +164,12 @@ public class BeanUtil {
     /**
      * 获取值为空的字段
      */
-    public static String[] getNullPropertyNames (Object source) {
+    public static String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
         java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
         Set<String> emptyNames = new HashSet<String>();
-        for(java.beans.PropertyDescriptor pd : pds) {
+        for (java.beans.PropertyDescriptor pd : pds) {
             Object srcValue = src.getPropertyValue(pd.getName());
             if (srcValue == null) emptyNames.add(pd.getName());
         }
@@ -181,7 +181,7 @@ public class BeanUtil {
      * 将src不为空的值，覆盖到target
      * 这里是使用的BeanUtils方法实现忽略null。结果同copyProperties
      */
-    public static void copyPropertiesIgnoreNull(Object src, Object target){
+    public static void copyPropertiesIgnoreNull(Object src, Object target) {
         BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
     }
 
