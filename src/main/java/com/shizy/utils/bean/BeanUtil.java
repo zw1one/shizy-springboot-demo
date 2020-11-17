@@ -2,6 +2,7 @@ package com.shizy.utils.bean;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -187,7 +188,15 @@ public class BeanUtil {
 
     /***********************************************************/
 
+    public static <T> Map<String, Object> genMapFromEntity(T entity) {
+        return genMapFromEntity(entity, new HashMap<String, Object>());
+    }
+
     public static <T> Map<String, Object> genMapFromEntity(T entity, Map<String, Object> existMap) {
+        return genMapFromEntity(entity, existMap, true);
+    }
+
+    public static <T> Map<String, Object> genMapFromEntity(T entity, Map<String, Object> existMap, boolean ignoreNull) {
         Class<?> aClass = entity.getClass();
         //迭代get方法
         for (Method method : aClass.getMethods()) {
@@ -198,17 +207,17 @@ public class BeanUtil {
             String field = method.getName().substring(3, 4).toLowerCase() +
                     method.getName().substring(4);
             try {
-                existMap.put(field, method.invoke(entity));
+                Object value = method.invoke(entity);
+                if (ignoreNull && (value == null || StringUtils.isBlank(value.toString()))) {
+                    continue;
+                }
+                existMap.put(field, value);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 logger.error("反射调用genMapFromEntity方法失败[entity={}]", entity);
                 throw new RuntimeException(e);
             }
         }
         return existMap;
-    }
-
-    public static <T> Map<String, Object> genMapFromEntity(T entity) {
-        return genMapFromEntity(entity, new HashMap<>());
     }
 
     public static <T> List<Map<String, Object>> genMapFromEntityList(List<T> entityList) {
