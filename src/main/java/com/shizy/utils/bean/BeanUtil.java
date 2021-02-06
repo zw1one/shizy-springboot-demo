@@ -42,13 +42,26 @@ public class BeanUtil {
             String field = method.getName().substring(3, 4).toLowerCase() +
                     method.getName().substring(4);
             try {
-                method.invoke(entity, paramMap.get(field));
+                Object value = paramMap.get(field);
+                if (value == null) {
+                    continue;
+                }
+                method.invoke(entity, value);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 logger.error("反射调用copyMapParam2Entity方法失败[paramMap={}],[entity={}]", paramMap, entity);
                 throw new RuntimeException(e);
             }
         }
         return entity;
+    }
+
+    public static <T> T copyMapParam2Entity(Map paramMap, Class<T> entityClass) {
+        try {
+            return copyMapParam2Entity(paramMap, entityClass.newInstance());
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.error("反射调用newInstance方法失败[class={}],[field={}]", entityClass);
+            throw new RuntimeException(e);
+        }
     }
 
     public static <T> List<T> copyMapParam2EntityList(List<Map> paramList, Class<T> entityClass) {
