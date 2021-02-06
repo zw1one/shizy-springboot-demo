@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * <p>
- * no redis
+ * no redis 简单的CRUD
  * </p>
  *
  * @author shizy

@@ -16,10 +16,10 @@
 
 
     <!--这个默认生成的selectPage得删了，不然用selectPage就会用到这个，而不是通用的-->
-    <!--<select id="selectPage" resultMap="BaseResultMap">-->
-        <!--select-->
-        <!--<include refid="Base_Column_List"></include>-->
-        <!--from user-->
-    <!--</select>-->
+    <select id="selectPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from user
+    </select>
 
 </mapper>

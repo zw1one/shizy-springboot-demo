@@ -69,6 +69,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page queryList(UserDto dto, Page page) {
+
+        //todo 如何增加list接口的拓展性
+
 //        QueryWrapper wrapper = QueryUtil.getEntityCondition(dto, new UserPo());
 //
 //        if (dto != null && dto.getNameAndAccount() != null && wrapper != null) {
@@ -89,11 +92,15 @@ public class UserServiceImpl implements UserService {
     /***********************************************/
 
     /**
-     * 若使用@Cacheable做缓存，返回值必须为要缓存的数据，且不方便设置过期时间、缓存格式，缓存在代码中的位置不可控，为了方便还是自己缓存好些
+     * 若使用@Cacheable做缓存，返回值必须为要缓存的数据，且不方便设置过期时间、缓存格式，缓存在代码中的位置不可控
+     * <p>
+     * 解决方案：
+     * 1、自己用注解实现切面处理
+     * 2、自己代码里删除
      * <p>
      * 缓存清理见 ClearRedisCache.java
      */
-
+//    @Cacheable
     @Override
     public String add(UserPo po) {
 

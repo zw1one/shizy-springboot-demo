@@ -21,9 +21,14 @@ public class PageDto {
     private Integer pageSize;
 
     public static Page getPageInstance(PageDto pageDto) {
-        int page0 = (pageDto.getPage() == null || pageDto.getPage() == 0) ? 1 : pageDto.getPage();
-        int pageSize0 = (pageDto.getPageSize() == null || pageDto.getPageSize() == 0) ? 10 : pageDto.getPageSize();
-        return new Page(page0, pageSize0);
+        return getPageInstance(pageDto, 1, 10);
+    }
+
+    public static Page getPageInstance(PageDto pageDto, Integer defaultPage, Integer defaultPageSize) {
+        return new Page(
+                (pageDto.getPage() == null || pageDto.getPage() == 0) ? defaultPage : pageDto.getPage(),//有值取值，无值取默认
+                (pageDto.getPageSize() == null || pageDto.getPageSize() == 0) ? defaultPageSize : pageDto.getPageSize()//有值取值，无值取默认
+        );
     }
 
 }

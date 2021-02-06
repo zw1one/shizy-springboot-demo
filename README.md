@@ -53,14 +53,14 @@ mvn clean package -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Prelease
 ### todo
 
 - update.xml
-  - todo mybatis-plus、多数据源
+  - mybatis-plus 多数据源支持
+  
+- ? 自定义@QueryParam注解来构建Wrappers查询条件
 
-- 代码生成器 使用思路
-  - × 查询条件生成的必要性？修改生成模板
-  - √ 简单表curd用生成的，复杂用自己写的 表设计时设计为简单的
-  - √ 生成mapper.xml 其中得带上baseCol 不使用select * （不使用的原因？）
-
-动态更新xml里面的sql 
+- 代码生成器 根据表生成
+  - × 哪些部分是要生成的？
+  
+  
+- 动态更新xml里面的sql 
 http://www.yihaomen.com/article/java/681.htm
 
-整理自己的工程
