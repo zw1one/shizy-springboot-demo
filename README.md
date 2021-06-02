@@ -4,7 +4,7 @@ shizy-springboot-demo
 
 ## quick start
 
-* <a>http://127.0.0.1/swagger-ui.html</a>
+* http://127.0.0.1/swagger-ui.html
 
 ### 启动出现问题
 

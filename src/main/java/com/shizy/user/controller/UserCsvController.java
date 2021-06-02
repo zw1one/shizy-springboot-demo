@@ -2,6 +2,7 @@ package com.shizy.user.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.shizy.common.json.JsonResult;
+import com.shizy.user.service.UserCsv2Service;
 import com.shizy.user.service.UserCsvService;
 import com.shizy.utils.format.FormatUtil;
 import io.swagger.annotations.Api;
@@ -29,6 +30,9 @@ public class UserCsvController {
     @Autowired
     private UserCsvService userCsvService;
 
+    @Autowired
+    private UserCsv2Service userCsv2Service;
+
     /**************************************************************/
 
     @ApiOperation(value = "import user data", notes = "测试见：http://127.0.0.1/cvs.html")
@@ -51,7 +55,8 @@ public class UserCsvController {
     private JsonResult importDataPorcess(MultipartFile file, Map<String, Object> params) {
         JSONObject rtn = null;
         try {
-            rtn = userCsvService.importData(file, params);
+//            rtn = userCsvService.importData(file, params);
+            rtn = userCsv2Service.importData(file, params);
         } catch (Exception e) {
             if (e.getCause() instanceof DuplicateKeyException) {
                 return JsonResult.fail("DuplicateKeyException: " + FormatUtil.getDuplicateKey(e.getCause().getMessage()));
