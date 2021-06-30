@@ -1,11 +1,13 @@
 package com.shizy.utils.excel;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.shizy.user.entity.UserExp;
+import com.shizy.utils.excel.read.CallbackAnalysisEventListener;
 import com.shizy.utils.excel.read.ReadCallback;
-import com.shizy.utils.excel.read.ReadExcel;
 import com.shizy.utils.excel.write.ExcelExporter;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +23,21 @@ import java.util.List;
  * <p>
  * easyexcel封装了批量读写，但是若有对复杂excel，如具体操作某行某列的情况，还是建议用poi手动处理（easyexcel中已经引入poi的包）。
  */
+@Deprecated
 public class EasyExcelUtil {
+
+
+    /**
+     * read
+     *
+     * @param inputStream  excel file imputstream
+     * @param readCallback 读取到一定条数或者读完一页的回调函数
+     * @param callbackSize 读取到一定条数或者读完一页就调用函数的"一定条数"
+     * @param head         列名的中文名，英文名相互转换
+     */
+    public static void read(InputStream inputStream, ReadCallback readCallback, int callbackSize, Integer headLineMun, Class head) {
+        new ReadExcel(inputStream, headLineMun, readCallback, callbackSize, head).read();
+    }
 
     /**
      * read
@@ -38,6 +54,7 @@ public class EasyExcelUtil {
     public static void read(InputStream inputStream, ReadCallback readCallback, Integer headLineMun) {
         new ReadExcel(inputStream, headLineMun, readCallback, 5000, null).read();
     }
+
     /****************************************/
 
     /**
@@ -85,6 +102,29 @@ public class EasyExcelUtil {
      */
     public static ExcelExporter getExportExcel() {
         return new ExcelExporter();
+    }
+
+    /****************************************/
+
+    static class ReadExcel {
+
+        ExcelReader excelReader;
+
+        public ReadExcel(InputStream inputStream, Integer headLineMun, ReadCallback readCallback, int callbackSize, Class head) {
+            excelReader = new ExcelReader(inputStream, null,
+                    new CallbackAnalysisEventListener(headLineMun, readCallback, callbackSize, head));
+        }
+
+        /**
+         * 旧版read
+         * easyexcel的新版还在迭代中，功能不一定稳定，代码写法也不一定就是现在的模式。暂时不用新版重写了。
+         */
+        public void read() {
+            for (Sheet sheet : excelReader.getSheets()) {
+                excelReader.read(sheet);
+            }
+        }
+
     }
 
 }

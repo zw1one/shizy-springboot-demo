@@ -7,7 +7,7 @@ import com.shizy.user.entity.UserPo;
 import com.shizy.user.mapper.UserMapper;
 import com.shizy.user.service.UserCsv2Service;
 import com.shizy.utils.bean.BeanUtil;
-import com.shizy.utils.excel.EasyExcelUtil;
+import com.shizy.utils.excel.EasyExcelUtil2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class UserCsv2ServiceImpl extends ServiceImpl<UserMapper, UserPo> impleme
     @Override
     public JSONObject importData(MultipartFile file, Map<String, Object> params) throws Exception {
         try (InputStream inputStream = file.getInputStream()) {
-            EasyExcelUtil.read(inputStream, (context, data) -> {
+            EasyExcelUtil2.read(inputStream, (context, data) -> {
                 List<UserPo> inserted = BeanUtil.copyMapParam2EntityList(data, UserPo.class);
                 this.saveOrUpdateBatch(inserted, 5000);
             }, 5000, UserExp.class);

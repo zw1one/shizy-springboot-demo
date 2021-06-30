@@ -1,4 +1,4 @@
-package com.shizy.utils.jdbc;
+package com.shizy.utils.batch;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

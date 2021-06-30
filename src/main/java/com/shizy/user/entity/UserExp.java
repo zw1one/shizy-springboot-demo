@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserExp {
 
-    @ExcelProperty("用户id")
+    @ExcelProperty("用户编号")
     private String userId;
 
     @ExcelProperty("用户名")

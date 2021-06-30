@@ -5,7 +5,7 @@ import com.alibaba.excel.metadata.Sheet;
 
 import java.io.InputStream;
 
-
+@Deprecated
 public class ReadExcel {
 
     ExcelReader excelReader;

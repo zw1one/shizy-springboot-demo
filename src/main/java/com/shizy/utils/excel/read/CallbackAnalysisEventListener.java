@@ -16,6 +16,7 @@ import java.util.Map;
 /**
  * 一个AnalysisEventListener实例，来顺序读取所有页
  */
+@Deprecated
 public class CallbackAnalysisEventListener extends AnalysisEventListener {
 
     private static final Logger logger = LoggerFactory.getLogger(EasyExcelUtil.class);

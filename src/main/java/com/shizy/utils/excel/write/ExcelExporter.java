@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
 
+@Deprecated
 public class ExcelExporter {
 
     ExcelWriter excelWriter = null;

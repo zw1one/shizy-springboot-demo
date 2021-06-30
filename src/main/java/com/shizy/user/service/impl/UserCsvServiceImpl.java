@@ -9,7 +9,7 @@ import com.shizy.user.service.UserService;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.excel.EasyExcelUtil;
 import com.shizy.utils.excel.write.ExcelExporter;
-import com.shizy.utils.jdbc.JdbcBatchUtil;
+import com.shizy.utils.batch.JdbcBatchUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
