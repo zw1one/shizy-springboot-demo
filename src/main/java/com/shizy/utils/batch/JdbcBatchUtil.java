@@ -33,6 +33,7 @@ public class JdbcBatchUtil {
             return null;
         }
 
+
         Class poClass = data.get(0).getClass();
 
         List<Field> fields = BeanUtil.getFields(poClass);
