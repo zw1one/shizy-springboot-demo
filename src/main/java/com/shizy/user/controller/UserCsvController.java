@@ -80,7 +80,7 @@ public class UserCsvController {
     @RequestMapping(value = "/user/exportData", method = RequestMethod.GET)
     public void exportData(@RequestParam(required = false) Map<String, Object> params) {
         try {
-            userCsvService.exportDataBatch(params);
+            userCsvService.exportDataAll(params);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

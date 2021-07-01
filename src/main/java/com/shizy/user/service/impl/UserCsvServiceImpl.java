@@ -11,6 +11,7 @@ import com.shizy.user.service.UserCsvService;
 import com.shizy.user.service.UserService;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.excel.EasyExcelUtil;
+import com.shizy.utils.excel.write.ExcelExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,12 @@ public class UserCsvServiceImpl extends ServiceImpl<UserMapper, UserPo> implemen
                 response,
                 UserExp.class
         );
+
+        /*String fileName = "user_data.xlsx";
+        ExcelExporter exportExcel = new ExcelExporter();
+        exportExcel.init(fileName, response, UserExp.class);
+        exportExcel.write(getMockList());
+        exportExcel.finish();*/
     }
 
     @Override
@@ -114,8 +121,7 @@ public class UserCsvServiceImpl extends ServiceImpl<UserMapper, UserPo> implemen
     }
 
     private List getMockList() {
-        return null;
-        /*List list = new ArrayList();
+        List list = new ArrayList();
         for (int i = 0; i < 10; i++) {
             list.add(UserDto.builder()
                     .userId("111")
@@ -123,7 +129,7 @@ public class UserCsvServiceImpl extends ServiceImpl<UserMapper, UserPo> implemen
                     .userAccount("111")
                     .build());
         }
-        return list;*/
+        return list;
     }
 }
 

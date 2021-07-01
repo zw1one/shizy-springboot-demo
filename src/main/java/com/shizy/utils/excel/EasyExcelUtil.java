@@ -117,6 +117,10 @@ public class EasyExcelUtil {
      * @param clazz    实体类。可以加上列名的中英文映射的注解
      */
     public static void export(List data, String fileName, HttpServletResponse response, Class clazz) {
+        if (data == null) {
+            throw new RuntimeException("export data is null");
+        }
+
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
         response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName));
@@ -127,11 +131,12 @@ public class EasyExcelUtil {
                     .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())//自动列宽
                     .build();
             excelWriter.write(data, EasyExcel.writerSheet("data").build());//第一次写入会创建头
+            excelWriter.finish();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             if (excelWriter != null) {
-                excelWriter.finish();//关闭response流
+                excelWriter.finish();//todo 这个加了有时候会报错？
             }
         }
     }
