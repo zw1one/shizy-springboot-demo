@@ -56,9 +56,10 @@ public class UserCsvController {
         try {
             rtn = userCsvService.importData(file, params);
         } catch (Exception e) {
-            if (e.getCause() instanceof DuplicateKeyException) {
+            /*if (e.getCause() instanceof DuplicateKeyException) {
                 return JsonResult.fail("DuplicateKeyException: " + FormatUtil.getDuplicateKey(e.getCause().getMessage()));
-            }
+            }*/
+            e.printStackTrace();
         }
         return JsonResult.success(rtn);
     }

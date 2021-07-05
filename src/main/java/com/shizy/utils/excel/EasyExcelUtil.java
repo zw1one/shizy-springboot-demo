@@ -8,7 +8,8 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
-import com.shizy.user.entity.UserExp;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,10 +41,12 @@ public class EasyExcelUtil {
      * @param readCallback 读取到一定条数或者读完一页的回调函数
      * @param callbackSize 读取到一定条数或者读完一页就调用函数的"一定条数"
      * @param head         列名的中文名，英文名相互转换
+     * @return excel总条数
      */
-    public static <T> void read(InputStream inputStream, ReadCallback readCallback, int callbackSize, Class<T> head) {
+    public static <T> Integer read(InputStream inputStream, ReadCallback readCallback, int callbackSize, Class<T> head) {
+        CallbackAnalysisEventListener callbackAnalysisEventListener = new CallbackAnalysisEventListener<T>(readCallback, callbackSize);
         EasyExcelFactory.read()
-                .registerReadListener(new CallbackAnalysisEventListener<T>(readCallback, callbackSize))
+                .registerReadListener(callbackAnalysisEventListener)
                 .file(inputStream)
                 .head(head)
                 .headRowNumber(1)
@@ -52,12 +55,14 @@ public class EasyExcelUtil {
                 .excelType(ExcelTypeEnum.XLSX)
                 .build()
                 .readAll();
+        return callbackAnalysisEventListener.getSum();
     }
 
+    @EqualsAndHashCode(callSuper = true)
+    @Data
     static class CallbackAnalysisEventListener<T> extends AnalysisEventListener {
 
         private ReadCallback readCallback;//回调
-
         private int callbackSize = 1000;//读了callbackSize条，调一次callback。读完该页，也会调一次callback
 
         CallbackAnalysisEventListener(ReadCallback<T> readCallback, int callbackSize) {
@@ -67,6 +72,7 @@ public class EasyExcelUtil {
 
         private List<String> titles;//列名
         private List<T> data = new ArrayList();//数据
+        private Integer sum = 0;//数据总数
 
         /**
          * 读完一行
@@ -97,6 +103,7 @@ public class EasyExcelUtil {
         private void doAfterReadSheel(AnalysisContext context) {
             readCallback.doAfterReadSheel(context, data);
             logger.info("-- " + "readed sheet " + context.readSheetHolder().getSheetNo() + " [" + context.readSheetHolder().getSheetName() + "]" + " read size：" + data.size());
+            sum += data.size();
             data = new ArrayList();//清空上一次的data
         }
     }
@@ -209,14 +216,6 @@ public class EasyExcelUtil {
         WriteSheet writeSheet = EasyExcel.writerSheet("data").build();
         excelWriter.write(data, writeSheet);
         excelWriter.finish();
-    }
-
-    public static void main(String[] args) {
-        List list = new ArrayList();
-        list.add(new UserExp("1", "2", "3"));
-        list.add(new UserExp("1", "2", "3"));
-        list.add(new UserExp("1", "2", "3"));
-        EasyExcelUtil.write(list, "D:/file/test.xlsx", UserExp.class);
     }
 
 }

@@ -1,5 +1,6 @@
-package com.shizy.utils.batch;
+package com.midea.jr.gfp.gbdp.commons.util.sqlsession;
 
+import com.shizy.utils.batch.SqlSessionBatchInsertMethod;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -23,7 +24,8 @@ public class SqlSessionBatchUtil<PO> {
      *
      * @param poList       待插入的数据List
      * @param insertMethod 插入数据的insert语句
-     * @return 返回生效的sql语句数量。
+     * @param batchSize    多少条数据提交一次
+     * @return 执行的sql语句数量。
      */
     public Integer insertBatch(List<PO> poList, SqlSessionBatchInsertMethod insertMethod, Integer batchSize) {
         final Integer[] successTotal = {0};
@@ -33,12 +35,10 @@ public class SqlSessionBatchUtil<PO> {
                 //调用插入语句，统计返回值(生效的行)
                 int result = 0;
                 try {
-//                  result = insertMethod.insert(po, sqlSession); // 这里返回信息不正确
+//                  result = insertMethod.insert(po, sqlSession); // 这里返回有异常
                     insertMethod.insert(po, sqlSession);
                     result = 1;
                 } catch (Exception e) {
-//                  e.printStackTrace();
-//                  LOGGER.debug("批量插入数据异常。异常数据[{}], 异常原因[{}]", po.toString(), e.getCause());
                     LOGGER.error("插入单条数据异常。异常数据[{}], 异常原因[{}]", po.toString(), e.getMessage());
                 }
                 //统计list中遍历的数量，达到批次号后提交一次
@@ -60,21 +60,15 @@ public class SqlSessionBatchUtil<PO> {
         } catch (Exception e) {
             LOGGER.error("批量插入List数据异常。异常原因[{}]", e.getMessage());
         }
-        return successTotal[0];//这个统计结果不对，错误sql会在sqlSession.flushStatements();时报出来，无法统计。
+
+        //这个统计结果不能过滤报错的sql，只能统计执行的sql总数
+        return successTotal[0];
     }
 
     /**
      * 多线程提交。提交效率高，数据库压力大。注意线程数不能设置过多
      */
     public Integer insertBatchParallel(List<PO> poList, SqlSessionBatchInsertMethod insertMethod, Integer batchSize) {
-        // todo
-        return null;
-    }
-
-    /**
-     * 根据Po类映射出insert or igonred语句。别的sql语句需自行在xml中定义
-     */
-    public Integer insertBatch(List<PO> poList, Integer batchSize) {
         // todo
         return null;
     }

@@ -11,7 +11,6 @@ import com.shizy.user.service.UserCsvService;
 import com.shizy.user.service.UserService;
 import com.shizy.utils.bean.BeanUtil;
 import com.shizy.utils.excel.EasyExcelUtil;
-import com.shizy.utils.excel.write.ExcelExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -47,29 +47,33 @@ public class UserCsvServiceImpl extends ServiceImpl<UserMapper, UserPo> implemen
 
     @Override
     public JSONObject importData(MultipartFile file, Map<String, Object> params) throws Exception {
+        Integer excelSum = 0;
+        final Integer[] sqlSum = {0};
+
         try (InputStream inputStream = file.getInputStream()) {
-            EasyExcelUtil.read(inputStream, (context, data) -> {
-                List<UserPo> inserted = BeanUtil.copyMapParam2EntityList(data, UserPo.class);
-                this.saveOrUpdateBatch(inserted, 5000);
-            }, 5000, UserExp.class);
+            excelSum = EasyExcelUtil.read(inputStream, (context, data) -> {
+                List<UserPo> inserted = BeanUtil.copyPropertiesList(data, UserPo.class);
+//                this.saveOrUpdateBatch(inserted, 5000);
+                sqlSum[0] += data.size();
+            }, 1000, UserExp.class);
         }
-        return null;
+
+        JSONObject result = new JSONObject();
+        result.put("excelSum", excelSum);
+        result.put("sqlSum", sqlSum[0]);
+        return result;
     }
 
     public JSONObject importDataParallel(MultipartFile file, Map<String, Object> params) throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(8);
-
         try (InputStream inputStream = file.getInputStream()) {
             EasyExcelUtil.read(inputStream, (context, data) -> {
-
                 executor.execute(() -> {
                     List<UserPo> inserted = BeanUtil.copyMapParam2EntityList(data, UserPo.class);
                     this.saveOrUpdateBatch(inserted, 5000);
                 });
-
             }, 5000, UserExp.class);
         }
-
         executor.shutdown();
         //手动等待，不需要结果则可以不等待
         while (!executor.isTerminated()) {
@@ -79,7 +83,6 @@ public class UserCsvServiceImpl extends ServiceImpl<UserMapper, UserPo> implemen
                 e.printStackTrace();
             }
         }
-
         return null;
     }
 
@@ -92,12 +95,6 @@ public class UserCsvServiceImpl extends ServiceImpl<UserMapper, UserPo> implemen
                 response,
                 UserExp.class
         );
-
-        /*String fileName = "user_data.xlsx";
-        ExcelExporter exportExcel = new ExcelExporter();
-        exportExcel.init(fileName, response, UserExp.class);
-        exportExcel.write(getMockList());
-        exportExcel.finish();*/
     }
 
     @Override
