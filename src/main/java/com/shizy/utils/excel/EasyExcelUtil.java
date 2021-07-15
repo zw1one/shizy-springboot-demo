@@ -35,7 +35,7 @@ public class EasyExcelUtil {
     /**************************************导入****************************************/
 
     /**
-     * read
+     * read all sheet
      *
      * @param inputStream  excel file imputstream
      * @param readCallback 读取到一定条数或者读完一页的回调函数
@@ -55,6 +55,42 @@ public class EasyExcelUtil {
                 .excelType(ExcelTypeEnum.XLSX)
                 .build()
                 .readAll();
+        return callbackAnalysisEventListener.getSum();
+    }
+
+    /**
+     * @param sheetName 仅读取名字为{sheetName}的sheet页数据
+     */
+    public static <T> Integer read(InputStream inputStream, ReadCallback readCallback, int callbackSize, Class<T> head, String sheetName) {
+        CallbackAnalysisEventListener callbackAnalysisEventListener = new CallbackAnalysisEventListener<T>(readCallback, callbackSize);
+        EasyExcelFactory.read()
+                .registerReadListener(callbackAnalysisEventListener)
+                .file(inputStream)
+                .head(head)
+                .headRowNumber(1)
+                .autoCloseStream(true)
+                .autoTrim(true)
+                .excelType(ExcelTypeEnum.XLSX)
+                .sheet(sheetName)
+                .doRead();
+        return callbackAnalysisEventListener.getSum();
+    }
+
+    /**
+     * @param sheetNo 仅读取下标为{sheetNo}的sheet页数据。下标从0开始计算
+     */
+    public static <T> Integer read(InputStream inputStream, ReadCallback readCallback, int callbackSize, Class<T> head, Integer sheetNo) {
+        CallbackAnalysisEventListener callbackAnalysisEventListener = new CallbackAnalysisEventListener<T>(readCallback, callbackSize);
+        EasyExcelFactory.read()
+                .registerReadListener(callbackAnalysisEventListener)
+                .file(inputStream)
+                .head(head)
+                .headRowNumber(1)
+                .autoCloseStream(true)
+                .autoTrim(true)
+                .excelType(ExcelTypeEnum.XLSX)
+                .sheet(sheetNo)
+                .doRead();
         return callbackAnalysisEventListener.getSum();
     }
 
