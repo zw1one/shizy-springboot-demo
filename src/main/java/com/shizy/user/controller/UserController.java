@@ -3,9 +3,7 @@ package com.shizy.user.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shizy.common.json.JsonResult;
 import com.shizy.common.json.page.PageDto;
-import com.shizy.user.controller.param.UserCtrParam_entityNoKey;
-import com.shizy.user.controller.param.UserCtrParam_key;
-import com.shizy.user.entity.UserDto;
+import com.shizy.user.controller.param.UserDto;
 import com.shizy.user.entity.UserPo;
 import com.shizy.user.entity.UserVo;
 import com.shizy.user.service.UserService;
@@ -29,7 +27,7 @@ public class UserController {
 
     @ApiOperation(value = "user add", notes = "")
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
-    public JsonResult add(@RequestBody UserCtrParam_entityNoKey param) {
+    public JsonResult add(@RequestBody UserDto param) {
         try {
             UserPo po = BeanUtil.copyProperties(param, new UserPo());
             String result = userService.add(po);
@@ -55,7 +53,7 @@ public class UserController {
 
     @ApiOperation(value = "user delete", notes = "")
     @RequestMapping(value = "/user/delete", method = RequestMethod.POST)
-    public JsonResult delete(@RequestBody UserCtrParam_key param) {
+    public JsonResult delete(@RequestBody UserDto param) {
         try {
             boolean result = userService.delete(param.getUserId());
             return JsonResult.success(result);
@@ -79,7 +77,7 @@ public class UserController {
 
     @ApiOperation(value = "user query list", notes = "")
     @RequestMapping(value = "/user/list", method = RequestMethod.POST)
-    public JsonResult queryList(@RequestBody(required = false) UserDto userDto, @ModelAttribute PageDto pageDto) {
+    public JsonResult queryList(@RequestBody(required = false) com.shizy.user.entity.UserDto userDto, @ModelAttribute PageDto pageDto) {
         try {
             Page pageList = userService.queryList(userDto, PageDto.getPageInstance(pageDto));
             return JsonResult.success(pageList);
