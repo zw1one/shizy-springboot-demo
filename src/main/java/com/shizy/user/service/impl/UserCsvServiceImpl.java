@@ -50,13 +50,36 @@ public class UserCsvServiceImpl extends ServiceImpl<UserMapper, UserPo> implemen
         Integer excelSum = 0;
         final Integer[] sqlSum = {0};
 
-        try (InputStream inputStream = file.getInputStream()) {
+        /*try (InputStream inputStream = file.getInputStream()) {
             excelSum = EasyExcelUtil.read(inputStream, (context, data) -> {
                 List<UserPo> inserted = BeanUtil.copyPropertiesList(data, UserPo.class);
 //                this.saveOrUpdateBatch(inserted, 5000);
                 sqlSum[0] += data.size();
             }, 1000, UserExp.class);
+        }*/
+
+        /**
+         * InputStream只能被一个ExcelRead占用，不能同时占用
+         * http://www.hohode.com/2018/09/26/Excel%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7easyexcel/
+         */
+
+        try (InputStream inputStream = file.getInputStream()) {
+            excelSum = EasyExcelUtil.read(inputStream, (context, data) -> {
+                List<UserPo> inserted = BeanUtil.copyPropertiesList(data, UserPo.class);
+//                this.saveOrUpdateBatch(inserted, 5000);
+                sqlSum[0] += data.size();
+            }, 1000, UserExp.class, 0);
         }
+
+        try (InputStream inputStream = file.getInputStream()) {
+            excelSum = EasyExcelUtil.read(inputStream, (context, data) -> {
+                List<UserPo> inserted = BeanUtil.copyPropertiesList(data, UserPo.class);
+//                this.saveOrUpdateBatch(inserted, 5000);
+                sqlSum[0] += data.size();
+            }, 1000, UserExp.class, 1);
+        }
+
+
 
         JSONObject result = new JSONObject();
         result.put("excelSum", excelSum);
